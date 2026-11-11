@@ -6,3 +6,6 @@ __pycache__/
 # Office 임시 잠금 파일 (파일을 열어둔 동안만 생김)
 ~$*
 node_modules/
+
+# 강의자료 원문 (원격에 올리지 않음)
+docs/references/
