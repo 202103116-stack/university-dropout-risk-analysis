@@ -1,5 +1,8 @@
 # 노트북 사용 안내 (Colab이 정본)
 
+- 팀 정본 Colab: https://colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc?usp=sharing
+- GitHub 저장소: https://github.com/202103116-stack/university-dropout-risk-analysis
+
 1. `팀프로젝트2_14조.ipynb`를 Google Drive에 업로드하고 Colab으로 엽니다
    (Drive → 새로 만들기 → 파일 업로드 → 우클릭 → Google Colaboratory로 열기).
 2. Colab 왼쪽 파일(폴더) 아이콘 → 업로드 → `../data/raw/교육부_대학알리미_중도탈락 학생 현황 _대학_학과별_20260831.csv`를 함께 올립니다.
