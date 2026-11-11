@@ -9,3 +9,6 @@ node_modules/
 
 # 강의자료 원문 (원격에 올리지 않음)
 docs/references/
+
+# 정제 결과는 노트북이 다시 만든다 (용량이 커서 git 제외)
+data/processed/*.csv
