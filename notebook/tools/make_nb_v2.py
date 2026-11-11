@@ -6,6 +6,7 @@ import cells_23 as C
 import cells_4 as C4
 import cells_5 as C5
 import cells_export as CX
+import cells_interp as CI
 
 OUT = sys.argv[1]
 cells = []
@@ -114,6 +115,8 @@ for i, s in enumerate(C4.S4):
     if i in HEAD4:
         md(HEAD4[i])
     code(s)
+    if i == 12:
+        code(CI.S4_13B)
 
 # ⑤ 발표
 section("⑤ 발표 (시각화·권고·근거·한계)",
@@ -185,6 +188,7 @@ section("부록 E. 보조 분석 R1 (인원×비율 착시, 가설 판정 아님
         "프로젝트1의 절대×비중 교훈: 비율만 보고 지원하면 큰 학과의 이탈 인원을 놓칠 수 있다.",
         "`00_문제정의_가설.md` 10절 규칙(교집합 < 5) 그대로, 두 목록과 교집합 출력")
 code(C4.S_E)
+code(CI.S_E2)
 md("## 부록 F. 발표·제출 문서용 수치 내보내기\n> 슬라이드(`slides/build_slides.js`)는 이 셀이 저장한 `slides_data.json`의 숫자만 쓴다.")
 code(CX.S_EXPORT)
 

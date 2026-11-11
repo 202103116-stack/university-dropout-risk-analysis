@@ -49,6 +49,12 @@ EXPORT = {
            'top_cnt': [{'학과명': r_['학과명'], '탈락합': int(r_['탈락합']), '재적합': int(r_['재적합']), '비율': float(r_['합산 비율(%)'])} for _, r_ in top_cnt.iterrows()],
            'inter': len(inter)},
     'hufs_depts': r1p_out.to_dict('records'),
+    'r1_adj': {'top_rate': [{'학과명': r_['학과명'], '탈락합': int(r_['탈락합']), '재적합': int(r_['재적합']), '비율': float(r_['합산 비율(%)']), '연평균재적': float(r_['연평균재적'])} for _, r_ in top_rate_adj.iterrows()],
+               'inter': len(inter_adj), 'n_flag': int(flag.sum()), 'n_units': len(r1x), 'flag_in_top': int(flag.loc[top_rate.index].sum()),
+               'top_rate_flags': [{'학과명': r1x.loc[i_, '학과명'], '해석': r1x.loc[i_, '해석'], '연평균재적': float(r1x.loc[i_, '연평균재적'])} for i_ in top_rate.index],
+               'flagged_codes_names': r1x.loc[flag, '학과명'].tolist()},
+    'premajor': {k_: {'enr': int(RSN.loc[k_, '재적학생']), 'drop': int(RSN.loc[k_, '계']), 'jatoe': int(RSN.loc[k_, '자퇴']),
+                      'rate': float(RSN.loc[k_, '합산 탈락률(%)']), 'jatoe_share': float(RSN.loc[k_, '자퇴 비중(%)'])} for k_ in RSN.index},
     'so_what': SO_WHAT,
 }
 for name_, pred_ in [('model2_k', sel_k), ('model2_05', (p2 >= 0.5).astype(int)), ('baseline2', TE['prev_high'].values)]:
