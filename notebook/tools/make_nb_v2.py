@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cells_23 as C
 import cells_4 as C4
 import cells_5 as C5
+import cells_export as CX
 
 OUT = sys.argv[1]
 cells = []
@@ -184,6 +185,8 @@ section("부록 E. 보조 분석 R1 (인원×비율 착시, 가설 판정 아님
         "프로젝트1의 절대×비중 교훈: 비율만 보고 지원하면 큰 학과의 이탈 인원을 놓칠 수 있다.",
         "`00_문제정의_가설.md` 10절 규칙(교집합 < 5) 그대로, 두 목록과 교집합 출력")
 code(C4.S_E)
+md("## 부록 F. 발표·제출 문서용 수치 내보내기\n> 슬라이드(`slides/build_slides.js`)는 이 셀이 저장한 `slides_data.json`의 숫자만 쓴다.")
+code(CX.S_EXPORT)
 
 
 nb = {"cells": cells, "metadata": {

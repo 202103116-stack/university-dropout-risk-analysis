@@ -59,6 +59,20 @@ TeamProject2_14_DroppingOut/
 | ④ 분석 | | EDA, 기술통계, 로지스틱 회귀, 기준선, 민감도, A·B 판정 | 노트북 ④, 기준선 비교표 |
 | ⑤ 발표 | 발표 전날 23:59 제출, 14·15주차 발표 `[확인 필요]` | 차트 3종, 권고·근거·한계, '믿기 어려운 이유' | `slides/`, `report/` |
 
+## 제출 파일 (`submission/`, `slides/`)
+| 제출물 | 파일 | 만드는 법 |
+|---|---|---|
+| 1. 발표 슬라이드 | `slides/14조_발표.pdf` (`.pptx` 원본, 발표자 노트 포함) | `node slides/build_slides.js` → `python -X utf8 slides/embed_fonts.py` → `slides/export_pdf.ps1` |
+| 2. 노트북 | `notebook/팀프로젝트2_14조.ipynb`, Colab 링크 | 생성 스크립트 `notebook/tools/make_nb_v2.py` |
+| 3. 원자료 | `data/raw/*.csv` + 수집 기록표 | — |
+| 4. 정제 로그 | `submission/14조_정제로그.pdf` | `node report/docx/make_submissions.js` → `finalize.ps1` |
+| 5. AI 활용 로그 | `submission/14조_AI활용로그.pdf` (본문 2쪽) | 위와 같음 |
+| 6. 기여도표 | `submission/14조_기여도표.pdf` | 위와 같음 |
+| 합본 | `submission/14조_제출물_합본.pdf` (정제 로그 + AI 활용 로그 + 기여도표) | 위와 같음 |
+
+- 슬라이드의 모든 수치는 노트북 부록 F 셀(sZ-01)이 저장한 `data/processed/slides_data.json`에서 읽는다. 슬라이드 그림은 `slides/make_slide_figures.py`.
+- 슬라이드 양식은 졸업논문 수업 발표와 같은 팀 Canva 틀(글꼴은 그 PPTX에 포함된 것을 `embed_fonts.py`가 옮겨 넣음, 원본 경로는 환경변수 `BRAND_PPTX`로 바꿀 수 있음).
+
 ## 제출물 체크리스트 (안내문의 "여섯 가지")
 - [ ] 1. 발표 슬라이드 PDF (본문 10장 이내 + 부록, 슬라이드마다 출처 줄)
 - [ ] 2. 노트북 (처음부터 재실행 가능, Colab 공유 링크). 안내문에서 이 행이 비어 있어 노트북으로 추정함 `[확인 필요 — 교수님께 문의]`
