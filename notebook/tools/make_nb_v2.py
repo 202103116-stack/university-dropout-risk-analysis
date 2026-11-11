@@ -7,6 +7,7 @@ import cells_4 as C4
 import cells_5 as C5
 import cells_export as CX
 import cells_interp as CI
+import cells_interp2 as CI2
 
 OUT = sys.argv[1]
 cells = []
@@ -117,6 +118,8 @@ for i, s in enumerate(C4.S4):
     code(s)
     if i == 12:
         code(CI.S4_13B)
+        md("### 가설 B 반대 결과 수용\n> 가설 B가 기각되어, 미리 정한 조항(가설 문서 7절)대로 반대 결과를 받아들이고 대안 설명을 적는다. 데이터로 확인되는 것과 추정을 나눈다.")
+        code(CI2.S4_12B)
 
 # ⑤ 발표
 section("⑤ 발표 (시각화·권고·근거·한계)",

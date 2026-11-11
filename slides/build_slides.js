@@ -348,23 +348,31 @@ pres.addSection({ title: "했다" });
 // ================================================================ 8. 그래서: 가설 B (차트 ②)
 pres.addSection({ title: "그래서" });
 {
-  const s = slide("그래서", `가설 B입니다. 한국외대의 비주류 외국어 학과군은 3년 합산 탈락률이 ${f2(G.hufs_target.rate)}%로, 교내 다른 학과 ${f2(G.hufs_other.rate)}%보다 오히려 ${f2(Math.abs(Bv["차이(%p)"]))}%p 낮았습니다. 구간도 0을 넘지 않아 가설 B는 기각입니다. 전국 같은 분야 학과 ${f2(G.national_same.rate)}%보다도 낮았습니다. 미리 정한 규칙대로, 어문 학과군의 문제는 이탈이 아니라 모집 쪽으로 넘깁니다. 대신 모델로 내년 후보를 뽑아 보니 상위 ${D.k_next}곳 중 ${D.cand_unit}곳이 통합모집, 계열, 자유전공처럼 전공을 정하기 전 단위였습니다. 이 단위들의 탈락은 ${f1(D.premajor["전공 배정 전 단위"].jatoe_share)}%가 자퇴여서, 1학년 때 다른 대학으로 다시 입학하는 반수나 입학 초기 부적응으로 추정됩니다. 개인 사유는 데이터에 없어 추정으로만 말씀드립니다.`);
+  const s = slide("그래서", `가설 B입니다. 한국외대의 비주류 외국어 학과군은 3년 합산 탈락률이 ${f2(G.hufs_target.rate)}%로, 교내 다른 학과 ${f2(G.hufs_other.rate)}%보다 오히려 ${f2(Math.abs(Bv["차이(%p)"]))}%p 낮았습니다. 구간도 0을 넘지 않아 가설 B는 기각입니다. 전국 같은 분야 학과 ${f2(G.national_same.rate)}%보다도 낮았습니다. 미리 정한 규칙대로, 어문 학과군의 문제는 이탈이 아니라 모집 쪽으로 넘깁니다. 왜 반대로 나왔는지 세 가지로 설명해 봤습니다. 첫째, 이탈이 앞 단계로 옮겨 갔을 수 있습니다. ${D.lang_unit_first}년 공시부터 외국어 계열 통합모집 단위가 생겼고, 이런 전공 배정 전 단위의 탈락은 대부분 자퇴였습니다. 다만 그 이전 해에도 어문 학과군이 낮았기 때문에 일부만 설명합니다. 둘째, 학생들이 스스로 고른 전공이라서일 수 있고, 셋째, 이중전공이나 전과로 학교를 떠나지 않고 길을 바꿀 수 있어서일 수 있습니다. 이 두 가지는 데이터에 없어 추정입니다. 대신 모델로 내년 후보를 뽑아 보니 상위 ${D.k_next}곳 중 ${D.cand_unit}곳이 통합모집, 계열, 자유전공처럼 전공을 정하기 전 단위였습니다. 이 단위들의 탈락은 ${f1(D.premajor["전공 배정 전 단위"].jatoe_share)}%가 자퇴여서, 1학년 때 다른 대학으로 다시 입학하는 반수나 입학 초기 부적응으로 추정됩니다. 개인 사유는 데이터에 없어 추정으로만 말씀드립니다.`);
   title(s, "가설 B: 한국외대 비주류 외국어 학과군", { hyp: "B", verdict: [`판정 ${D.verdict_B}`, C.b], w: 11 });
   headline(s, `비주류 외국어 학과군은 오히려 ${f2(Math.abs(Bv["차이(%p)"]))}%p 낮다 — 위험은 전공을 정하기 전 단위에 몰려 있다`);
-  fig(s, P("figures", "s08_hufs_groups.png"), MX, 2.65, 10.2, 6.95, "한국외대 학과군별 합산 탈락률과 95% 구간");
-  const x = 11.55;
+  fig(s, P("figures", "s08_hufs_groups.png"), MX, 2.65, 10.2, 5.95, "한국외대 학과군별 합산 탈락률과 95% 구간");
+  const x = 11.55, PM = D.premajor["전공 배정 전 단위"], OT = D.premajor["그 밖의 학과"], BY = D.b_yearly;
   card(s, x, 2.65, 7.65, 2.85, C.b);
-  T(s, [B("판정  ", { color: C.b }), N(`차이 ${f2(Bv["차이(%p)"])}%p, 95% 구간 [${f2(Bv["95% 하한"])}, ${f2(Bv["95% 상한"])}] — 하한이 0보다 작아 `), B(D.verdict_B, { color: C.b })], { x: x + 0.3, y: 2.8, w: 7.1, h: 1.2, fontSize: 15.5, valign: "middle" });
-  T(s, [B("규칙대로  ", { color: C.risk }), N("어문 학과군은 이탈 지원의 우선 대상이 아니다 → '모집(입학처)' 문제로 재정의")], { x: x + 0.3, y: 4.05, w: 7.1, h: 1.3, fontSize: 15.5, valign: "middle" });
-  card(s, x, 5.7, 7.65, 3.9);
-  sub(s, `공시 2027 우선 지원 후보 상위 ${D.k_next}곳 (모델 2)`, x + 0.3, 5.82, 7.2, C.brand, 18);
-  T(s, [B(`${D.cand_unit}곳`, { color: C.brand, fontSize: 30 }), N(`  통합모집 · 계열 · 자유전공 등 전공 배정 전 단위    `, { fontSize: 14 }), B(`${D.cand_target}곳`, { color: C.b, fontSize: 30 }), N("  비주류 외국어", { fontSize: 14 })], { x: x + 0.3, y: 6.35, w: 7.2, h: 0.75, valign: "middle" });
-  const top = D.cand.slice(0, 4), PM = D.premajor["전공 배정 전 단위"], OT = D.premajor["그 밖의 학과"];
+  T(s, [B("판정  ", { color: C.b }), N(`차이 ${f2(Bv["차이(%p)"])}%p, 95% 구간 [${f2(Bv["95% 하한"])}, ${f2(Bv["95% 상한"])}] — 하한이 0보다 작아 `), B(D.verdict_B, { color: C.b }), N(`. ${D.b_years}개 연도 모두 낮음`)], { x: x + 0.3, y: 2.78, w: 7.1, h: 0.95, fontSize: 14.5, valign: "middle" });
+  T(s, [B("참고  ", { color: C.muted }), N(`전국 같은 소계열(${G.national_same.n_school}개교)보다도 ${f2(Math.abs(D.nat_diff))}%p 낮음 (가설 아님)`)], { x: x + 0.3, y: 3.75, w: 7.1, h: 0.6, fontSize: 14, valign: "middle" });
+  T(s, [B("규칙대로  ", { color: C.risk }), N("이탈 지원의 우선 대상이 아니다 → '모집(입학처)' 관점으로 재정의")], { x: x + 0.3, y: 4.4, w: 7.1, h: 0.95, fontSize: 14.5, valign: "middle" });
+  card(s, x, 5.7, 7.65, 2.9);
+  sub(s, `공시 2027 우선 지원 후보 상위 ${D.k_next}곳 (모델 2)`, x + 0.3, 5.8, 7.2, C.brand, 18);
+  T(s, [B(`${D.cand_unit}곳`, { color: C.brand, fontSize: 28 }), N(`  전공 배정 전 단위    `, { fontSize: 14 }), B(`${D.cand_target}곳`, { color: C.b, fontSize: 28 }), N("  비주류 외국어", { fontSize: 14 })], { x: x + 0.3, y: 6.3, w: 7.2, h: 0.65, valign: "middle" });
+  const top = D.cand.slice(0, 3);
   const rows = [[HD("후보"), HD("재적"), HD("탈락률"), HD("점수")]].concat(top.map((r) => [CELL(r["학과명"]), CELL(`${r["재적"]}명`, { al: "center" }), CELL(`${f1(r["비율"])}%`, { al: "center" }), CELL(f2(r["점수"]), { al: "center" })]));
-  s.addTable(rows, { ...TBL, x: x + 0.3, y: 7.15, w: 7.05, colW: [3.85, 1.0, 1.1, 1.1], fontSize: 12, rowH: 0.34 });
-  T(s, [B("사유  ", { color: C.risk }), N(`탈락의 ${f1(PM.jatoe_share)}%가 자퇴(그 밖 ${f1(OT.jatoe_share)}%) → 반수 · 초기 부적응 추정`)], { x: x + 0.3, y: 8.98, w: 7.1, h: 0.55, fontSize: 13.5, valign: "middle" });
-  readBar(s, "참고", `전국(한국외대 제외) 같은 소계열 ${G.national_same.n_school}개교와 비교만 했다(가설 아님): 한국외대가 ${f2(Math.abs(D.nat_diff))}%p 낮음 → 미리 정한 문구 "${D.nat_phrase.split("→")[0].trim()}"`, 9.75);
-  foot(s, `${SRC} · 노트북 §④ 셀 s4-10·s4-12·s4-13 · §⑤ 셀 s5-c09 (필수 차트 ②)`);
+  s.addTable(rows, { ...TBL, x: x + 0.3, y: 7.0, w: 7.05, colW: [3.85, 1.0, 1.1, 1.1], fontSize: 12, rowH: 0.32 });
+  // 반대 결과 수용 (가설 문서 7절 조항): 대안 설명 — 데이터로 확인되는 것과 추정을 나눔 (노트북 s4-12b)
+  box(s, MX, 8.82, CW, 1.6, { fill: C.tint, line: C.tint, r: 0.08 });
+  T(s, "반대 결과 수용 — 왜 낮게 나왔나", { x: MX + 0.25, y: 8.88, w: 9, h: 0.42, fontFace: F.bodyB, fontSize: 15, color: C.brand, valign: "middle" });
+  T(s, [
+    B("① 이탈이 앞 단계로 옮겨 감 (데이터로 일부 확인)  ", { color: C.ink }),
+    N(`${D.lang_unit_first} 공시부터 외국어 계열 통합모집 ${D.lang_units.length}개 단위가 생겼고 전공 배정 전 단위 탈락의 ${f1(PM.jatoe_share)}%가 자퇴. 단 그 전(${D.b_years - 1}개 연도)에도 낮았던 것은 설명 못 함 → 부분 설명`, { color: C.ink, breakLine: true }),
+    B("② 스스로 고른 전공 (추정)  ", { color: C.ink }), N("지망 동기는 데이터에 없음      "),
+    B("③ 떠나지 않고 전공을 바꾸는 길 (추정)  ", { color: C.ink }), N("이중전공 · 전과 운영 실태 [확인 필요]"),
+  ], { x: MX + 0.25, y: 9.32, w: CW - 0.5, h: 1.05, fontSize: 14.5, valign: "top", paraSpaceAfter: 4 });
+  foot(s, `${SRC} · 노트북 §④ 셀 s4-10·s4-12·s4-12b·s4-13·s4-13b · §⑤ 셀 s5-c09 (필수 차트 ②)`);
 }
 
 // ================================================================ 9. 그래서: 권고와 근거

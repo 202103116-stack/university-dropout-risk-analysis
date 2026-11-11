@@ -49,6 +49,8 @@ EXPORT = {
            'top_cnt': [{'학과명': r_['학과명'], '탈락합': int(r_['탈락합']), '재적합': int(r_['재적합']), '비율': float(r_['합산 비율(%)'])} for _, r_ in top_cnt.iterrows()],
            'inter': len(inter)},
     'hufs_depts': r1p_out.to_dict('records'),
+    'b_yearly': {int(k_): {c_: float(v_) for c_, v_ in r_.items() if c_ != '대상군이 더 낮음'} for k_, r_ in yr_b.iterrows()},
+    'b_low_years': n_low_years, 'b_years': len(yr_b), 'lang_unit_first': first_lu, 'lang_units': lu.reset_index()['학과명'].tolist(),
     'r1_adj': {'top_rate': [{'학과명': r_['학과명'], '탈락합': int(r_['탈락합']), '재적합': int(r_['재적합']), '비율': float(r_['합산 비율(%)']), '연평균재적': float(r_['연평균재적'])} for _, r_ in top_rate_adj.iterrows()],
                'inter': len(inter_adj), 'n_flag': int(flag.sum()), 'n_units': len(r1x), 'flag_in_top': int(flag.loc[top_rate.index].sum()),
                'top_rate_flags': [{'학과명': r1x.loc[i_, '학과명'], '해석': r1x.loc[i_, '해석'], '연평균재적': float(r1x.loc[i_, '연평균재적'])} for i_ in top_rate.index],
