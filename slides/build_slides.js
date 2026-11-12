@@ -369,13 +369,14 @@ pres.addSection({ title: "그래서" });
   s.addTable(rows, { ...TBL, x: x + 0.3, y: 7.0, w: 7.05, colW: [3.85, 1.0, 1.1, 1.1], fontSize: 12, rowH: 0.32 });
   // 반대 결과 수용 (가설 문서 7절 조항): 대안 설명 — 데이터로 확인되는 것과 추정을 나눔 (노트북 s4-12b)
   box(s, MX, 8.82, CW, 1.6, { fill: C.tint, line: C.tint, r: 0.08 });
-  T(s, "반대 결과 수용 — 왜 낮게 나왔나", { x: MX + 0.25, y: 8.88, w: 9, h: 0.42, fontFace: F.bodyB, fontSize: 15, color: C.brand, valign: "middle" });
+  T(s, "반대 결과 수용 — 왜 낮게 나왔나", { x: MX + 0.25, y: 8.86, w: 9, h: 0.4, fontFace: F.bodyB, fontSize: 15, color: C.brand, valign: "middle" });
   T(s, [
-    B("① 이탈이 앞 단계로 옮겨 감 (데이터로 일부 확인)  ", { color: C.ink }),
-    N(`${D.lang_unit_first} 공시부터 외국어 계열 통합모집 ${D.lang_units.length}개 단위가 생겼고 전공 배정 전 단위 탈락의 ${f1(PM.jatoe_share)}%가 자퇴. 단 그 전(${D.b_years - 1}개 연도)에도 낮았던 것은 설명 못 함 → 부분 설명`, { color: C.ink, breakLine: true }),
-    B("② 스스로 고른 전공 (추정)  ", { color: C.ink }), N("지망 동기는 데이터에 없음      "),
-    B("③ 떠나지 않고 전공을 바꾸는 길 (추정)  ", { color: C.ink }), N("이중전공, 전과 운영 실태 [확인 필요]"),
-  ], { x: MX + 0.25, y: 9.32, w: CW - 0.5, h: 1.05, fontSize: 14.5, valign: "top", paraSpaceAfter: 4 });
+    B("① 결과 전에 적어 둔 가능성과 일치  ", { color: C.ink }),
+    N(`"한국외대는 이 분야 대표 학교라 스스로 지망한 학생이 많아 탈락률이 낮거나 비슷할 수 있다"(가설 문서 v2, 11/11 고정). 지망 여부는 데이터에 없어 확인은 못 함`, { color: C.ink, breakLine: true }),
+    B("② 이탈이 1학년 단위로 옮겨 감 (일부 확인)  ", { color: C.ink }),
+    N(`${D.lang_unit_first} 공시부터 외국어 계열 통합모집 생김, 전공 배정 전 단위 탈락의 ${f1(PM.jatoe_share)}%가 자퇴. 그 전 해도 낮아 부분 설명      `),
+    B("③ 이중전공, 전과 (추정)", { color: C.ink }),
+  ], { x: MX + 0.25, y: 9.28, w: CW - 0.5, h: 1.1, fontSize: 13.5, valign: "top", paraSpaceAfter: 3 });
   foot(s, `${SRC}, 노트북 §④ 셀 s4-10, s4-12, s4-12b, s4-13, s4-13b, §⑤ 셀 s5-c09 (필수 차트 ②)`);
 }
 
