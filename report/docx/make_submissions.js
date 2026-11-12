@@ -67,7 +67,12 @@ function md2docx(file, shift = 1) {
     const l = lines[i];
     if (/^# /.test(l) || /^---\s*$/.test(l) || !l.trim()) { i += 1; continue; }
     const h = l.match(/^(#{2,4}) (.*)/);
-    if (h) { out.push(S.H(Math.min(h[1].length - 2 + shift, 4), h[2].replace(/`/g, ''))); i += 1; continue; }
+    if (h) {
+      const lvl = Math.min(h[1].length - 2 + shift, 4), txt = h[2].replace(/`/g, '');
+      const sm = txt.match(/^(.*?)\s*(\((?:노트북 §③ 실행 순서|정제 전)\))$/);   // 제목 끝 보조 설명은 작은 글씨
+      out.push(sm ? new Paragraph({ heading: `Heading${lvl}`, children: [...S.runs(sm[1]), new TextRun({ text: ' ' + sm[2], size: 22 })] }) : S.H(lvl, txt));
+      i += 1; continue;
+    }
     if (l.trim().startsWith('|')) {
       const block = [];
       while (i < lines.length && lines[i].trim().startsWith('|')) block.push(lines[i++]);
@@ -172,7 +177,7 @@ const build = (name, front, body) => {
 
 (async () => {
   for (const d of DOCS) {
-    const c = cover(COVER('빅데이터분석 팀 프로젝트2 제출물', d.title, `${MAIN}  |  ${d.sub}`));
+    const c = cover(COVER('빅데이터분석 팀 프로젝트2 제출물', d.title, MAIN));
     await build(d.file, c, d.body(1));
   }
   // 합본: 표지 + 목차 + 문서 3개(각각 제목 1)
