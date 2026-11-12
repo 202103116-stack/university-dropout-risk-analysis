@@ -63,7 +63,7 @@ TeamProject2_14_DroppingOut/
 | 제출물 | 파일 | 만드는 법 |
 |---|---|---|
 | 1. 발표 슬라이드 | `slides/14조_발표.pdf` (`.pptx` 원본, 발표자 노트 = 대본), 대본, 예상 질문 `slides/발표대본.md` | `node slides/build_slides.js` → `python -X utf8 slides/embed_fonts.py` → `slides/export_pdf.ps1` |
-| 2. 노트북 | `notebook/팀프로젝트2_14조.ipynb`, Colab 링크 | 생성 스크립트 `notebook/tools/make_nb_v2.py` |
+| 2. 노트북 | `notebook/팀프로젝트2_14조.ipynb`(팀 정본), Colab 링크. 팀원 노트북: 박유진 Colab, `notebook/14조_신효주_최종.ipynb` | 생성 스크립트 `notebook/tools/make_nb_v2.py` |
 | 3. 원자료 | `data/raw/*.csv` + 수집 기록표 | — |
 | 4. 정제 로그 | `submission/14조_정제로그.pdf` | `node report/docx/make_submissions.js` → `finalize.ps1` |
 | 5. AI 활용 로그 | `submission/14조_AI활용로그.pdf` (본문 2쪽) | 위와 같음 |
