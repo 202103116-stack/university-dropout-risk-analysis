@@ -34,12 +34,16 @@ def step(sec, cid, title, what, exp=None, extra=""):
     code(s)
 
 
+WHO_BY = {"①": ("박유진", "신효주"), "②": ("박유진", "정승엽"), "③": ("정승엽", "박유진"), "④": ("정승엽", "신효주"), "⑤": ("신효주", "정승엽"), "부록 A": ("전원", "전원"), "부록 E": ("정승엽", "신효주")}
+
+
 def section(title, what, why, trace):
+    who = next((v for k, v in WHO_BY.items() if title.startswith(k)), ("전원", "전원"))
     md(f"""
 ## {title}
 - **무엇을**: {what}
 - **왜**: {why}
-- **초안 담당자**: `[팀 입력]`, **검토자**: `[팀 입력]` (`logs/기여도표.md`와 일치)
+- **초안 담당자**: {who[0]}, **검토자**: {who[1]} (`logs/기여도표.md`와 일치)
 - **이 단계의 검증 흔적**: {trace}
 """)
 
