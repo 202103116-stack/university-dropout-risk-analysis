@@ -49,6 +49,7 @@ EXPORT = {
            'top_cnt': [{'학과명': r_['학과명'], '탈락합': int(r_['탈락합']), '재적합': int(r_['재적합']), '비율': float(r_['합산 비율(%)'])} for _, r_ in top_cnt.iterrows()],
            'inter': len(inter)},
     'hufs_depts': r1p_out.to_dict('records'),
+    'fair': {k_: ({int(kk): float(vv) for kk, vv in v_.items()} if isinstance(v_, dict) else v_) for k_, v_ in FAIR.items()},
     'b_yearly': {int(k_): {c_: float(v_) for c_, v_ in r_.items() if c_ != '대상군이 더 낮음'} for k_, r_ in yr_b.iterrows()},
     'b_low_years': n_low_years, 'b_years': len(yr_b), 'lang_unit_first': first_lu, 'lang_units': lu.reset_index()['학과명'].tolist(),
     'r1_adj': {'top_rate': [{'학과명': r_['학과명'], '탈락합': int(r_['탈락합']), '재적합': int(r_['재적합']), '비율': float(r_['합산 비율(%)']), '연평균재적': float(r_['연평균재적'])} for _, r_ in top_rate_adj.iterrows()],

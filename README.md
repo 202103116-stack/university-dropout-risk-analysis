@@ -62,7 +62,7 @@ TeamProject2_14_DroppingOut/
 ## 제출 파일 (`submission/`, `slides/`)
 | 제출물 | 파일 | 만드는 법 |
 |---|---|---|
-| 1. 발표 슬라이드 | `slides/14조_발표.pdf` (`.pptx` 원본, 발표자 노트 포함) | `node slides/build_slides.js` → `python -X utf8 slides/embed_fonts.py` → `slides/export_pdf.ps1` |
+| 1. 발표 슬라이드 | `slides/14조_발표.pdf` (`.pptx` 원본, 발표자 노트 = 대본), 대본·예상 질문 `slides/발표대본.md` | `node slides/build_slides.js` → `python -X utf8 slides/embed_fonts.py` → `slides/export_pdf.ps1` |
 | 2. 노트북 | `notebook/팀프로젝트2_14조.ipynb`, Colab 링크 | 생성 스크립트 `notebook/tools/make_nb_v2.py` |
 | 3. 원자료 | `data/raw/*.csv` + 수집 기록표 | — |
 | 4. 정제 로그 | `submission/14조_정제로그.pdf` | `node report/docx/make_submissions.js` → `finalize.ps1` |
