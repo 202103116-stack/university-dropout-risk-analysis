@@ -10,7 +10,7 @@
 | 범위 | 전국 일반 대학 주간 학과. 50,081행, 원본의 88.9% (계획서 기준값 — 노트북 재실행으로 확정 필요). 전체 표본은 민감도 분석용 |
 | 데이터 | 교육부 대학알리미 중도탈락 학생 현황(대학, 학과별), 공공데이터포털 15164570, 공공누리 제1유형 |
 | 팀 | 정승엽, 박유진, 신효주 |
-| 노트북 | [Colab (팀 정본)](https://colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc?usp=sharing) |
+| 노트북 | [Colab (정승엽 · 팀 정본)](https://colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc?usp=sharing) · [Colab (박유진, 재현성 확인)](https://colab.research.google.com/drive/1Tded6jGpKo6t-hRTiHinln37t0vluC7d?usp=sharing) |
 | 저장소 | [GitHub](https://github.com/202103116-stack/university-dropout-risk-analysis) |
 | 기준 문서 | 안내문 기준: [docs/기준_정리.md](docs/기준_정리.md)<br>가설: [00_문제정의_가설.md](00_문제정의_가설.md) (태그 `hypotheses-locked-v2`, 보완 `hypotheses-locked-v3`) |
 

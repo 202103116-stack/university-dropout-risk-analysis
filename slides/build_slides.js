@@ -447,15 +447,16 @@ pres.addSection({ title: "부록" });
   title(s, "부록 A. 재현성 확인");
   headline(s, "노트북을 새 커널에서 처음부터 실행해 같은 숫자가 나오는지 확인했다");
   const rows = [[HD("확인 항목"), HD("정승엽 (로컬)"), HD("박유진"), HD("신효주")],
-    [CELL("에러 없이 완주"), CELL("O", { al: "center" }), CELL("[팀 입력]", { al: "center", color: C.muted }), CELL("[팀 입력]", { al: "center", color: C.muted })],
-    [CELL("원본 행 × 열"), CELL(`${n0(D.n_raw)} × ${D.n_cols}`, { al: "center" }), CELL(""), CELL("")],
-    [CELL("범위 안 행 수 / 분석 표본 쌍 수"), CELL(`${n0(D.n_scope)} / ${n0(D.n_sample)}`, { al: "center" }), CELL(""), CELL("")],
-    [CELL("가설 A 사립 · 비수도권 오즈비"), CELL(`${f2(A.priv.or)} · ${f2(A.nonmetro.or)}`, { al: "center" }), CELL(""), CELL("")],
-    [CELL("가설 B 차이와 95% 구간"), CELL(`${f2(Bv["차이(%p)"])}%p [${f2(Bv["95% 하한"])}, ${f2(Bv["95% 상한"])}]`, { al: "center" }), CELL(""), CELL("")],
-    [CELL("모델 2 정밀도 / 작년 명단"), CELL(`${f1(m2["정밀도(%)"])}% / ${f1(b2["정밀도(%)"])}%`, { al: "center" }), CELL(""), CELL("")],
-    [CELL("실행 환경"), CELL(`Python ${D.versions.python}, pandas ${D.versions.pandas}`, { al: "center" }), CELL(""), CELL("")]];
+    [CELL("에러 없이 완주"), CELL("O", { al: "center" }), CELL("O", { al: "center" }), CELL("[팀 입력]", { al: "center", color: C.muted })],
+    [CELL("원본 행 × 열"), CELL(`${n0(D.n_raw)} × ${D.n_cols}`, { al: "center" }), CELL("56,340 × 32", { al: "center" }), CELL("")],
+    [CELL("범위 안 행 수 / 분석 표본 쌍 수"), CELL(`${n0(D.n_scope)} / ${n0(D.n_sample)}`, { al: "center" }), CELL("50,081 / 23,114", { al: "center" }), CELL("")],
+    [CELL("가설 A 사립 · 비수도권 오즈비"), CELL(`${f2(A.priv.or)} · ${f2(A.nonmetro.or)}`, { al: "center" }), CELL("3.83 · 3.36", { al: "center" }), CELL("")],
+    [CELL("가설 B 차이와 95% 구간"), CELL(`${f2(Bv["차이(%p)"])}%p [${f2(Bv["95% 하한"])}, ${f2(Bv["95% 상한"])}]`, { al: "center" }), CELL("-1.25%p [-1.92, -0.56]", { al: "center" }), CELL("")],
+    [CELL("모델 2 정밀도 / 작년 명단"), CELL(`${f1(m2["정밀도(%)"])}% / ${f1(b2["정밀도(%)"])}%`, { al: "center" }), CELL("60.3% / 58.6%", { al: "center" }), CELL("")],
+    [CELL("실행 환경"), CELL(`로컬 Python ${D.versions.python}, pandas ${D.versions.pandas}`, { al: "center" }), CELL("Colab Python 3.13.18, pandas 2.2.3", { al: "center" }), CELL("")]];
   s.addTable(rows, { ...TBL, x: MX, y: 2.75, w: CW, colW: [5.6, 5.0, 3.9, 3.9], fontSize: 15, rowH: 0.62 });
-  readBar(s, "링크", "Colab(팀 정본) colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc  ·  GitHub github.com/202103116-stack/university-dropout-risk-analysis", 8.6);
+  readBar(s, "링크", "Colab 정승엽(팀 정본) …/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc  ·  박유진 …/1Tded6jGpKo6t-hRTiHinln37t0vluC7d  ·  GitHub 202103116-stack/university-dropout-risk-analysis", 8.6);
+  T(s, "pandas 주 버전이 달라도(2.2.3 · 3.0.6) 모든 숫자가 같았다", { x: MX, y: 9.35, w: CW, h: 0.4, fontSize: 14, color: C.muted });
   foot(s, `logs/재현성_확인표.md · 실행 ${D.run_at}`);
 }
 // B. 기여도표

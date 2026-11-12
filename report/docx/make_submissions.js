@@ -15,6 +15,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const COLAB = 'https://colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc?usp=sharing';
 const REPO = 'https://github.com/202103116-stack/university-dropout-risk-analysis';
+const COLAB_YJ = 'https://colab.research.google.com/drive/1Tded6jGpKo6t-hRTiHinln37t0vluC7d?usp=sharing';  // 박유진 재현성 확인용 (신효주는 받으면 추가)
 const ASSET = (f) => fs.readFileSync(path.join(__dirname, 'assets', f));
 const icon = (f, mm = 4.2) => new ImageRun({ type: 'png', data: ASSET(f), transformation: { width: Math.round(mm * 3.78), height: Math.round(mm * 3.78) } });
 const link = (text, url, size = 20) => new ExternalHyperlink({ link: url, children: [new TextRun({ text, font: S.font(S.SANS), size, color: '0563C1', underline: {} })] });
@@ -147,7 +148,7 @@ const COVER = (kicker, title, subtitle) => ({
     ['조', '14조'],
     ['팀 원', '정승엽, 박유진, 신효주'],
     ['자료 저장소', iconLink('github.com/202103116-stack/university-dropout-risk-analysis', REPO)],
-    ['Colab 노트북', iconLink('Colab(팀 정본)', COLAB)],
+    ['Colab 노트북', [...iconLink('Colab(정승엽 · 팀 정본)', COLAB), new TextRun({ text: '  |  ', color: '7F7F7F' }), ...iconLink('Colab(박유진)', COLAB_YJ)]],
   ],
   date: '2026. 11. 12.',
   team: '14조',
