@@ -1,5 +1,5 @@
 // 14조 팀보고서 공통 스타일: 공공기관 보고서 양식(A4)
-// 본문 휴먼명조, 제목·표지·캡션 한국외대체(B/M/L), 표 안 글자 맑은 고딕
+// 본문 휴먼명조, 제목, 표지, 캡션 한국외대체(B/M/L), 표 안 글자 맑은 고딕
 // 템플릿(make_template.js)과 실제 보고서(make_report.js)가 이 파일 하나를 같이 쓴다.
 const {
   AlignmentType, BorderStyle, Footer, Header, LevelFormat, LevelSuffix, PageNumber,
@@ -29,11 +29,11 @@ const CONTENT_WIDTH = PAGE.size.width - PAGE.margin.left - PAGE.margin.right; //
 
 const COLOR = {
   text: '000000',
-  gray: '595959',
+  gray: '000000',  // 회색 글자 쓰지 않음(머리글, 부제, 출처 줄 모두 검정)
   rule: '808080',
   headFill: 'D9E2F3', // 표 머리글 음영(연한 남색)
   noteFill: 'F2F2F2',
-  accent: '1F3864', // 제목 1 구분선·표지 선
+  accent: '1F3864', // 제목 1 구분선, 표지 선
 };
 
 const LINE_160 = 384; // 줄 간격 160% (240 = 100%)
@@ -137,7 +137,7 @@ const styles = {
 };
 
 // 제목 번호: Ⅰ. → 1. → 가. → 1)  (postprocess.py가 제목 1~4 스타일에 연결해 자동 번호로 만든다)
-// 글머리: □ → ○ → - → ·
+// 글머리: □ → ○ → - →, 
 const numbering = {
   config: [
     {
@@ -155,7 +155,7 @@ const numbering = {
         { level: 0, format: LevelFormat.BULLET, text: '□', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 340, hanging: 340 } } } },
         { level: 1, format: LevelFormat.BULLET, text: '○', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 680, hanging: 300 } } } },
         { level: 2, format: LevelFormat.BULLET, text: '-', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 1000, hanging: 260 } } } },
-        { level: 3, format: LevelFormat.BULLET, text: '·', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 1300, hanging: 240 } } } },
+        { level: 3, format: LevelFormat.BULLET, text: ', ', alignment: AlignmentType.LEFT, style: { paragraph: { indent: { left: 1300, hanging: 240 } } } },
       ],
     },
   ],
@@ -163,7 +163,7 @@ const numbering = {
 
 // ── 문단 도우미 ─────────────────────────────────────────
 // 인라인 **굵게** 를 TextRun으로 나눔
-// 인라인 **굵게** 와 `코드`(파일 경로·코드 조각)를 TextRun으로 나눔
+// 인라인 **굵게** 와 `코드`(파일 경로, 코드 조각)를 TextRun으로 나눔
 const CODE_FONT = { ascii: 'Consolas', hAnsi: 'Consolas', eastAsia: SANS, cs: 'Consolas' };
 function runs(text, opts = {}) {
   const parts = String(text).split(/(\*\*[^*]+\*\*|`[^`]+`)/g).filter(Boolean);
@@ -194,7 +194,7 @@ const figureCaption = (title) => new Paragraph({
   children: [new TextRun('[그림 '), new SequentialIdentifier('그림'), new TextRun('] ' + title)],
 });
 
-// 표: 위·아래 굵은 선, 안쪽 가는 선, 머리글 음영 (공공기관 표 양식)
+// 표: 위, 아래 굵은 선, 안쪽 가는 선, 머리글 음영 (공공기관 표 양식)
 function table(headers, rows, widths, { align, size, keep } = {}) {
   const ro = size ? { size } : {};
   const total = widths.reduce((a, b) => a + b, 0);
@@ -207,7 +207,7 @@ function table(headers, rows, widths, { align, size, keep } = {}) {
     verticalAlign: VerticalAlign.CENTER,
     margins: { top: 60, bottom: 60, left: 100, right: 100 },
     shading: head ? { type: ShadingType.CLEAR, color: 'auto', fill: COLOR.headFill } : undefined,
-    // 칸 값: 문자열(줄바꿈 \n 가능) 또는 줄 배열(각 줄은 문자열이나 런 배열 — 링크·아이콘 포함)
+    // 칸 값: 문자열(줄바꿈 \n 가능) 또는 줄 배열(각 줄은 문자열이나 런 배열 — 링크, 아이콘 포함)
     children: (Array.isArray(text) ? text : String(text).split('\n')).map((line) => new Paragraph({
       style: head ? 'TableHead' : 'TableText',
       keepNext: keep,
@@ -228,7 +228,7 @@ function table(headers, rows, widths, { align, size, keep } = {}) {
 }
 
 // 그림: 폭(mm) 기준으로 비율 유지해 넣음
-// 이미지 크기·형식(PNG/JPEG) 판별
+// 이미지 크기, 형식(PNG/JPEG) 판별
 function imageInfo(data) {
   if (data.readUInt32BE(0) === 0x89504e47) return { type: 'png', w: data.readUInt32BE(16), h: data.readUInt32BE(20) };
   if (data[0] === 0xff && data[1] === 0xd8) {
@@ -253,7 +253,7 @@ function figure(data, widthMm) {
   return new Paragraph({ style: 'Figure', children: [new ImageRun({ type, data, transformation: { width: wPx, height: hPx } })] });
 }
 
-function figurePlaceholder(text = '(그림·스크린샷 자리)', heightMm = 45, widthMm = 110) {
+function figurePlaceholder(text = '(그림, 스크린샷 자리)', heightMm = 45, widthMm = 110) {
   const dash = { style: BorderStyle.DASHED, size: 6, color: '7F7F7F' };
   const w = Math.round(widthMm * MM);
   return new Table({
@@ -269,7 +269,7 @@ function figurePlaceholder(text = '(그림·스크린샷 자리)', heightMm = 45
   });
 }
 
-const RUNNING_TITLE = '빅데이터분석 팀 프로젝트  |  14조 · 중도탈락 예측';
+const RUNNING_TITLE = '빅데이터분석 팀 프로젝트  |  14조 중도탈락 예측';
 const headers = {
   default: new Header({
     children: [new Paragraph({
@@ -293,7 +293,7 @@ const footers = {
 };
 
 const frontFooter = new Footer({ children: [new Paragraph({ children: [] })] });
-// 앞부분(표지·목차): 표지는 머리글·쪽 번호 없음, 목차 쪽은 머리글만
+// 앞부분(표지, 목차): 표지는 머리글, 쪽 번호 없음, 목차 쪽은 머리글만
 const frontSection = (children) => ({
   properties: { page: PAGE, titlePage: true },
   headers, footers: { default: frontFooter, first: footers.first }, children,

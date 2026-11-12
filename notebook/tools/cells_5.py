@@ -11,8 +11,8 @@ except ImportError:
     subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'koreanize-matplotlib'], check=False)
     import koreanize_matplotlib  # noqa: F401
 plt.rcParams.update({'axes.spines.top': False, 'axes.spines.right': False, 'axes.grid': True, 'grid.color': '#e6e5e1',
-                     'grid.linewidth': 0.8, 'axes.edgecolor': '#8a8984', 'axes.labelcolor': '#52514e', 'xtick.color': '#52514e',
-                     'ytick.color': '#52514e', 'figure.dpi': 110, 'savefig.dpi': 200, 'axes.axisbelow': True,
+                     'grid.linewidth': 0.8, 'axes.edgecolor': '#8a8984', 'axes.labelcolor': '#000000', 'xtick.color': '#000000',
+                     'ytick.color': '#000000', 'figure.dpi': 110, 'savefig.dpi': 200, 'axes.axisbelow': True,
                      'axes.titleweight': 'bold', 'axes.titlesize': 13, 'axes.titlelocation': 'left', 'axes.unicode_minus': False})
 from matplotlib.ticker import FixedLocator, FuncFormatter
 PLAIN = FuncFormatter(lambda v, _: f'{v:g}')
@@ -22,7 +22,7 @@ SRC_TXT = '출처: 교육부 대학알리미 중도탈락 학생 현황(공공�
 SO_WHAT = {}
 
 def finish(fig, cid, name, so_what):
-    fig.text(0.01, 0.005, SRC_TXT.format(cid=cid), fontsize=8, color='#7a7974', ha='left', va='bottom')
+    fig.text(0.01, 0.005, SRC_TXT.format(cid=cid), fontsize=8, color='#000000', ha='left', va='bottom')
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     path = f'{FIG_DIR}/cand_{cid[-3:]}_{name}.png'
     fig.savefig(path, bbox_inches='tight')
@@ -32,7 +32,7 @@ def finish(fig, cid, name, so_what):
 '''
 
 S5 = [
-r'''# s5-c01 [단독, 베스트 후보·필수 교차] 탈락 인원(명) × 탈락률(%) 산점도 — 분석 표본 t=2026, 한국외대 강조
+r'''# s5-c01 [단독, 베스트 후보, 필수 교차] 탈락 인원(명) × 탈락률(%) 산점도 — 분석 표본 t=2026, 한국외대 강조
 te = TE.copy()
 fig, ax = plt.subplots(figsize=(8.5, 5.6))
 oth = te[~te['학교코드'].eq(HUFS_CODE)]
@@ -62,7 +62,7 @@ ax.axhline(CUT, color=C2, lw=2, ls='--'); ax.set_title('작은 학과일수록 �
 iqr = [g.quantile(.75) - g.quantile(.25) for g in groups]
 finish(fig, 's5-c02', 'size_box', f'사분위 범위(IQR)가 Q1 {iqr[0]:.1f}%p → Q4 {iqr[3]:.1f}%p — 소규모 학과는 비율이 크게 흔들려 최소 재적 기준(30명)과 인원 병기가 필요')
 ''',
-r'''# s5-c03 [서브플롯] 공시연도별 비율 결측률과 재적 0 건수 — 함정(공시 정의·결측 패턴 변화)
+r'''# s5-c03 [서브플롯] 공시연도별 비율 결측률과 재적 0 건수 — 함정(공시 정의, 결측 패턴 변화)
 yy = df.groupby('공시연도').agg(결측률=('중도탈락학생비율', lambda v: v.isna().mean() * 100), 재적0=('재적학생', lambda v: v.eq(0).sum()))
 fig, axs = plt.subplots(1, 2, figsize=(9, 3.8))
 axs[0].bar(yy.index.astype(str), yy['결측률'], color=C1, width=0.55); axs[0].set_title('탈락률 결측 비율 (%)')
@@ -83,7 +83,7 @@ for y_, (n_, v_) in zip(ys, st):
     ax.text(v_ + 500, y_, f'{v_:,}', va='center', fontsize=10, color=INK)
 ax.set_yticks(ys, [n_ for n_, _ in st]); ax.set_xlim(0, len(df_raw) * 1.15); ax.grid(axis='y', visible=False)
 ax.set_xlabel('행 수 (연결 이후는 전년→당해 쌍 수)'); ax.set_title('행은 지우지 않고 표시만 — 단계별로 남은 표본')
-finish(fig, 's5-c04', 'funnel', f'원본 {len(df_raw):,}행 중 분석 표본 {len(sample):,}쌍 — 각 단계의 제외 사유와 건수는 정제로그 표 4·5')
+finish(fig, 's5-c04', 'funnel', f'원본 {len(df_raw):,}행 중 분석 표본 {len(sample):,}쌍 — 각 단계의 제외 사유와 건수는 정제로그 표 4, 5')
 ''',
 r'''# s5-c05 [단독, 베스트 후보] 전년도 탈락률 × 당해 탈락률 — 지속성(기준선 ②의 근거), 테스트 t=2026
 fig, ax = plt.subplots(figsize=(6.2, 5.6))
@@ -106,11 +106,11 @@ ax.bar(xs, vals, color=cols, width=0.6)
 for x_, v_, n_ in zip(xs, vals, ns):
     ax.text(x_, v_ + 0.8, f'{v_:.1f}%\n({n_:,}쌍)', ha='center', fontsize=9, color=INK)
 ax.set_xticks(xs, [f'{a}\n{b}' for a, b in cats]); ax.set_ylabel('고위험 학과 비율 (%)'); ax.set_ylim(0, max(vals) * 1.25)
-ax.axhline(25, color='#8a8984', lw=1, ls=':'); ax.text(-0.42, 25.6, '전체 기준 25%', fontsize=8, color='#52514e', ha='left')
+ax.axhline(25, color='#8a8984', lw=1, ls=':'); ax.text(-0.42, 25.6, '전체 기준 25%', fontsize=8, color='#000000', ha='left')
 ax.set_title('사립 + 비수도권 학과의 고위험 비율이 가장 높다'); ax.grid(axis='x', visible=False)
-finish(fig, 's5-c06', 'sector_region', f'사립·비수도권 {vals[3]:.1f}% vs 국공립·수도권 {vals[0]:.1f}% — 두 요인이 겹치므로 회귀(s4-05)로 각각의 효과를 분리')
+finish(fig, 's5-c06', 'sector_region', f'사립, 비수도권 {vals[3]:.1f}% vs 국공립, 수도권 {vals[0]:.1f}% — 두 요인이 겹치므로 회귀(s4-05)로 각각의 효과를 분리')
 ''',
-r'''# s5-c07 [단독] 시·도별 고위험 비율 (가설 A 기술통계)
+r'''# s5-c07 [단독] 시, 도별 고위험 비율 (가설 A 기술통계)
 sd = sido.sort_values('고위험비율')
 fig, ax = plt.subplots(figsize=(7, 5.6))
 colors_ = [C1 if r in ('서울', '인천', '경기') else GRAY for r in sd.index]
@@ -118,8 +118,8 @@ ax.barh(sd.index, sd['고위험비율'], color=colors_, height=0.65)
 for y_, (v_, n_) in enumerate(zip(sd['고위험비율'], sd['학교수'])):
     ax.text(v_ + 0.6, y_, f'{v_:.1f}% ({n_}개교)', va='center', fontsize=8.5, color=INK)
 ax.set_xlabel('고위험 학과 비율 (%)'); ax.set_xlim(0, sd['고위험비율'].max() * 1.25); ax.grid(axis='y', visible=False)
-ax.set_title('시·도별 고위험 학과 비율 (파랑 = 수도권)')
-finish(fig, 's5-c07', 'sido', f"{sd.index[-1]} {sd['고위험비율'].iloc[-1]:.1f}% ~ {sd.index[0]} {sd['고위험비율'].iloc[0]:.1f}% — 수도권 3곳이 하위권(학교 수가 적은 시·도는 해석 주의)")
+ax.set_title('시, 도별 고위험 학과 비율 (파랑 = 수도권)')
+finish(fig, 's5-c07', 'sido', f"{sd.index[-1]} {sd['고위험비율'].iloc[-1]:.1f}% ~ {sd.index[0]} {sd['고위험비율'].iloc[0]:.1f}% — 수도권 3곳이 하위권(학교 수가 적은 시, 도는 해석 주의)")
 ''',
 r'''# s5-c08 [단독, 베스트 후보] 가설 A 오즈비 포레스트 플롯 (95% CI, 학교 군집 SE)
 rows_ = [('사립 (vs 국공립)', 'priv'), ('비수도권 (vs 수도권)', 'nonmetro'),
@@ -132,13 +132,13 @@ for i, (lab_, key) in enumerate(rows_[::-1]):
     c_ = C2 if key in ('priv', 'nonmetro') else C1
     ax.plot([lo_, hi_], [i, i], color=c_, lw=2); ax.plot(o, i, 'o', color=c_, ms=8, mec='white', mew=1.2)
     ax.text(hi_ * 1.08, i, f'{o:.2f}', va='center', fontsize=9, color=INK)
-ax.axvline(1, color='#52514e', lw=1.2)
+ax.axvline(1, color='#000000', lw=1.2)
 ax.set_xscale('log'); ax.xaxis.set_major_locator(FixedLocator([0.5, 1, 2, 4, 8])); ax.xaxis.set_major_formatter(PLAIN); ax.xaxis.set_minor_locator(FixedLocator([]))
 ax.set_yticks(range(len(rows_)), [r[0] for r in rows_[::-1]]); ax.grid(axis='y', visible=False)
-ax.set_xlabel('오즈비 (로그 눈금, 1 = 차이 없음)'); ax.set_title(f'가설 A: 사립·비수도권 모두 1보다 크다 → {verdict_A}')
-finish(fig, 's5-c08', 'forest_A', f"대계열·규모를 통제해도 사립 {tabA.loc['priv', '오즈비']:.1f}배, 비수도권 {tabA.loc['nonmetro', '오즈비']:.1f}배 — 다만 소규모(Q1) 효과가 {tabA.loc[rows_[2][1], '오즈비']:.1f}배로 가장 크다")
+ax.set_xlabel('오즈비 (로그 눈금, 1 = 차이 없음)'); ax.set_title(f'가설 A: 사립, 비수도권 모두 1보다 크다 → {verdict_A}')
+finish(fig, 's5-c08', 'forest_A', f"대계열, 규모를 통제해도 사립 {tabA.loc['priv', '오즈비']:.1f}배, 비수도권 {tabA.loc['nonmetro', '오즈비']:.1f}배 — 다만 소규모(Q1) 효과가 {tabA.loc[rows_[2][1], '오즈비']:.1f}배로 가장 크다")
 ''',
-r'''# s5-c09 [단독, 베스트 후보·필수 B] 한국외대 학과군별 2024~2026 합산 탈락률 + 학과코드 부트스트랩 95% 구간
+r'''# s5-c09 [단독, 베스트 후보, 필수 B] 한국외대 학과군별 2024~2026 합산 탈락률 + 학과코드 부트스트랩 95% 구간
 def boot_one(d, n=2000, seed=RANDOM_STATE):
     rng = np.random.default_rng(seed)
     g = d.groupby('학과코드')[['계', '재적학생']].sum().values
@@ -159,7 +159,7 @@ finish(fig, 's5-c09', 'hufs_groups', f"교내 다른 학과보다 {abs(resB['차
 r'''# s5-c10 [단독] 한국외대 학과별 인원(명) × 비율(%) — 2024~2026 합산, 비주류 외국어 학과군 강조
 r1p = H.groupby('학과코드').agg(탈락합=('계', 'sum'), 재적합=('재적학생', 'sum'), 대상=('target', 'max'), 학과명=('학과명', 'last'), 연수=('공시연도', 'nunique'))
 r1p['비율'] = r1p['탈락합'] / r1p['재적합'] * 100
-# 비율 해석 불가: 연평균 재적 < MIN_ENROLL(30명) — '재적 1명 · 탈락 1명 = 100%' 같은 개편 · 신설 단위 (근거는 부록 E 셀 sE-02)
+# 비율 해석 불가: 연평균 재적 < MIN_ENROLL(30명) — '재적 1명, 탈락 1명 = 100%' 같은 개편, 신설 단위 (근거는 부록 E 셀 sE-02)
 r1p['해석불가'] = r1p['재적합'] / r1p['연수'] < MIN_ENROLL
 ok_r = r1p[~r1p['해석불가']]
 fig, ax = plt.subplots(figsize=(8, 5.2))
@@ -168,7 +168,7 @@ for flag, c_, lab_ in [(False, GRAY, '다른 학과'), (True, C1, '비주류 외
     ax.scatter(d_['탈락합'], d_['비율'], s=np.clip(d_['재적합'] / 8, 10, 200), color=c_, alpha=0.8, edgecolor='white', linewidth=0.8, label=lab_)
 lab_pts = pd.concat([ok_r.nlargest(3, '탈락합'), ok_r.nlargest(3, '비율')]).drop_duplicates(subset=['탈락합', '비율'])
 for _, r_ in lab_pts.iterrows():
-    ax.annotate(r_['학과명'], (r_['탈락합'], r_['비율']), xytext=(5, 4), textcoords='offset points', fontsize=8, color='#52514e')
+    ax.annotate(r_['학과명'], (r_['탈락합'], r_['비율']), xytext=(5, 4), textcoords='offset points', fontsize=8, color='#000000')
 ax.set_xlabel('합산 탈락 인원 (명)'); ax.set_ylabel('합산 탈락률 (%)')
 ax.set_title(f"한국외대: 비율 상위와 인원 상위는 다른 학과 (점 크기 = 재적, 연평균 재적 {MIN_ENROLL}명 이상)"); ax.legend(frameon=False)
 inter10 = set(ok_r.sort_values(['비율', '탈락합'], ascending=False).head(10).index) & set(r1p.sort_values(['탈락합', '비율'], ascending=False).head(10).index)
@@ -187,7 +187,7 @@ ax.set_ylabel('합산 탈락률 (%)'); ax.set_xlim(-0.2, len(yr) + 0.9); ax.set_
 order_ok = int(((yr['한국외대 대상군'] < yr['한국외대 다른 학과']) & (yr['한국외대 다른 학과'] < yr['전국 같은 소계열'])).sum())
 finish(fig, 's5-c11', 'hufs_vs_nat_year', f'3개 연도 중 {order_ok}개 연도에서 한국외대 대상군 < 교내 다른 학과 < 전국 같은 소계열 — 결론이 특정 해에만 의존하는지 확인')
 ''',
-r'''# s5-c12 [단독, 베스트 후보·필수 예측] 같은 k에서 모델 vs 기준선 정밀도 (테스트 t=2026)
+r'''# s5-c12 [단독, 베스트 후보, 필수 예측] 같은 k에서 모델 vs 기준선 정밀도 (테스트 t=2026)
 ev = EVAL.iloc[:3].copy()
 labs = ['모델 1\n구조 변수', '모델 2\n구조 + 전년도 탈락률', '기준선 ②\n작년 고위험 그대로']
 fig, ax = plt.subplots(figsize=(7.2, 4.5))
@@ -195,7 +195,7 @@ cols = [GRAY, C1, C2]
 ax.bar(range(3), ev['정밀도(%)'], color=cols, width=0.58)
 for i, (p_, h_) in enumerate(zip(ev['정밀도(%)'], ev['맞힌 학과 수'])):
     ax.text(i, p_ + 1, f'{p_:.1f}%\n({int(h_):,}개 적중)', ha='center', fontsize=9.5, color=INK)
-ax.axhline(TE['y'].mean() * 100, color='#8a8984', lw=1, ls=':'); ax.text(-0.45, TE['y'].mean() * 100 + 0.8, f"무작위로 고르면 {TE['y'].mean() * 100:.1f}%", fontsize=8, ha='left', color='#52514e')
+ax.axhline(TE['y'].mean() * 100, color='#8a8984', lw=1, ls=':'); ax.text(-0.45, TE['y'].mean() * 100 + 0.8, f"무작위로 고르면 {TE['y'].mean() * 100:.1f}%", fontsize=8, ha='left', color='#000000')
 ax.set_xticks(range(3), labs); ax.set_ylabel(f'정밀도 (%) — 지원한 {K:,}개 학과 중 실제 고위험'); ax.set_ylim(0, 80); ax.grid(axis='x', visible=False)
 ax.set_title(f'작년 고위험 학과 수(k={K:,})만큼 지원한다면')
 finish(fig, 's5-c12', 'model_vs_baseline', f"모델 2가 작년 명단보다 {EVAL.loc[1, '정밀도(%)'] - EVAL.loc[2, '정밀도(%)']:+.1f}%p(적중 {int(EVAL.loc[1, '맞힌 학과 수'] - EVAL.loc[2, '맞힌 학과 수']):+d}개) — 개선은 작고, 구조 정보만으로는 작년 명단보다 못하다")
@@ -204,21 +204,21 @@ r'''# s5-c13 [단독, 베스트 후보] k(지원 학과 수)에 따른 정밀도
 fig, ax = plt.subplots(figsize=(7.5, 4.5))
 for col, c_ in [('모델 1', GRAY), ('모델 2', C1), ('기준선 ② (전년도 탈락률 순)', C2)]:
     ax.plot(KCURVE['k'], KCURVE[col], marker='o', ms=8, lw=2, color=c_, label=col)
-ax.axvline(K, color='#8a8984', lw=1, ls=':'); ax.text(K, 92, f' k={K:,}', fontsize=8, color='#52514e')
+ax.axvline(K, color='#8a8984', lw=1, ls=':'); ax.text(K, 92, f' k={K:,}', fontsize=8, color='#000000')
 ax.set_xlabel('지원 학과 수 k'); ax.set_ylabel('정밀도 (%)'); ax.set_ylim(40, 95); ax.legend(frameon=False, loc='lower left')
 ax.set_title('지원 학과 수를 바꿔도 모델 2 ≈ 작년 명단')
 finish(fig, 's5-c13', 'k_curve', '적게 지원할수록 정밀도는 높지만, 어떤 k에서도 모델 2와 작년 명단의 차이는 ±2%p 안팎 — 결론이 k 선택에 좌우되지 않음')
 ''',
-r'''# s5-c14 [단독] 민감도 요약 — 조건별 사립·비수도권 오즈비 하한과 정밀도 차이
+r'''# s5-c14 [단독] 민감도 요약 — 조건별 사립, 비수도권 오즈비 하한과 정밀도 차이
 sv = SENS_T.copy()
 sv['정밀도 차이'] = sv['모델2 정밀도'].astype(float) - sv['기준선② 정밀도'].astype(float)
 fig, axs = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
 ys = np.arange(len(sv))[::-1]
 axs[0].plot(sv['사립 CI하한'].astype(float), ys, 'o', ms=8, color=C2, label='사립')
 axs[0].plot(sv['비수도권 CI하한'].astype(float), ys, 's', ms=8, color=C1, label='비수도권')
-axs[0].axvline(1, color='#52514e', lw=1.2); axs[0].set_title('A 오즈비 95% 하한 (1보다 크면 충족)'); axs[0].legend(frameon=False)
+axs[0].axvline(1, color='#000000', lw=1.2); axs[0].set_title('A 오즈비 95% 하한 (1보다 크면 충족)'); axs[0].legend(frameon=False)
 axs[0].set_yticks(ys, sv.index)
-axs[1].barh(ys, sv['정밀도 차이'], color=C1, height=0.5); axs[1].axvline(0, color='#52514e', lw=1.2)
+axs[1].barh(ys, sv['정밀도 차이'], color=C1, height=0.5); axs[1].axvline(0, color='#000000', lw=1.2)
 axs[1].set_title('모델 2 - 작년 명단 정밀도 (%p)')
 for a_ in axs:
     a_.grid(axis='y', visible=False)
@@ -226,7 +226,7 @@ finish(fig, 's5-c14', 'sensitivity', '6개 조건 모두 A 맞음(하한 > 1), �
 ''',
 ]
 
-S5_SELECT = r"""# s5-sel ⑤-2 베스트 3종 선택 결과 → 보고서·슬라이드용 파일 이름으로 저장
+S5_SELECT = r"""# s5-sel ⑤-2 베스트 3종 선택 결과 → 보고서, 슬라이드용 파일 이름으로 저장
 # [출처 규칙] '(출처: 노트북 §⑤ 셀 s5-sel)' — 점수는 아래 마크다운 표(⑤-2)의 팀 기준
 import shutil
 BEST = {'fig1_scatter.png': 'cand_c10_hufs_count_rate.png',        # 필수 ① 교차 산점도

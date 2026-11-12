@@ -1,6 +1,6 @@
-# 노트북 0·②·③ 실제 코드 셀 (make_nb_v2.py에서 import)
+# 노트북 0, ②, ③ 실제 코드 셀 (make_nb_v2.py에서 import)
 
-ENV = r'''# s0-01 환경·경로·스위치
+ENV = r'''# s0-01 환경, 경로, 스위치
 import os, glob, platform, datetime
 import numpy as np
 import pandas as pd
@@ -26,12 +26,12 @@ FIG_DIR = 'figures'
 os.makedirs(PROC_DIR, exist_ok=True)
 os.makedirs(FIG_DIR, exist_ok=True)
 
-# 고정값·되돌림 스위치 (logs/정제로그.md 표 6, 00_문제정의_가설.md와 이름 일치)
+# 고정값, 되돌림 스위치 (logs/정제로그.md 표 6, 00_문제정의_가설.md와 이름 일치)
 RANDOM_STATE = 42
 SCOPE = 'general_day'            # 'general_day'(일반 대학 주간, 사전 고정) | 'all'(전체 표본, 민감도 ②)
-MIN_ENROLL = 30                  # 직전연도 최소 재적(명), 민감도 10·50
+MIN_ENROLL = 30                  # 직전연도 최소 재적(명), 민감도 10, 50
 MIN_ENROLL_SENS = [10, 30, 50]
-HIGH_PCT = 75                    # 고위험 컷 백분위(상위 25%), 민감도 80·70
+HIGH_PCT = 75                    # 고위험 컷 백분위(상위 25%), 민감도 80, 70
 RATE_SOURCE = 'published'        # 공시 비율 사용(팀 결정 2026-11-11)
 HUFS_CODE = 192                  # 한국외국어대학교 (사이버한국외국어대학교 332와 구분)
 B_SUBFIELDS = ['기타유럽어・문학', '기타아시아어・문학']
@@ -46,7 +46,7 @@ print('PROC_DIR =', PROC_DIR, '| FIG_DIR =', FIG_DIR)
 
 S2 = [
 r'''# s2-01 출처 표기
-# [출처 규칙] 이 셀의 수치를 보고서·발표에 옮길 때 '(출처: 노트북 §② 셀 s2-01)'를 붙인다.
+# [출처 규칙] 이 셀의 수치를 보고서, 발표에 옮길 때 '(출처: 노트북 §② 셀 s2-01)'를 붙인다.
 SOURCE_INFO = {
     '데이터명': '교육부_대학알리미_중도탈락 학생 현황_대학_학과별',
     '제공처': '공공데이터포털 15164570 (https://www.data.go.kr/data/15164570/fileData.do)',
@@ -93,7 +93,7 @@ overview
 S3_TOOLS = r'''# s3-00 단계별 추적 도구
 # [기준] 행 삭제 금지(표시 후 표본에서 제외), y(비율) 보정 금지, 건수는 코드 계산값만, 0행 필터는 멈춤(assert)
 KEY = ['공시연도', '학교코드', '학과코드']
-LOG = []          # 정제 처리 로그(정제로그 표 4): 처리·건수·근거·영향
+LOG = []          # 정제 처리 로그(정제로그 표 4): 처리, 건수, 근거, 영향
 TRACK = {}        # 단계별 추적표(정제로그 표 5)
 
 def log(no, 처리, 건수, 근거, 영향):
@@ -120,7 +120,7 @@ def make_flags(d):
     return f
 
 def rate_valid(d):
-    """y로 쓸 수 있는 비율: 재적 > 0, 계·비율 존재 (공시값 그대로)"""
+    """y로 쓸 수 있는 비율: 재적 > 0, 계, 비율 존재 (공시값 그대로)"""
     return d['재적학생'].gt(0) & d['계'].notna() & d['중도탈락학생비율'].notna()
 
 def track(stage, d):
@@ -148,7 +148,7 @@ r'''# s3-02 [유일성] 중복
 # [출처 규칙] '(출처: 노트북 §③ 셀 s3-02)'
 n_full_dup = int(df.duplicated().sum())
 n_key_dup = int(df.duplicated(KEY).sum())
-print('완전 중복:', n_full_dup, '| 키(공시연도·학교코드·학과코드) 중복:', n_key_dup)
+print('완전 중복:', n_full_dup, '| 키(공시연도, 학교코드, 학과코드) 중복:', n_key_dup)
 assert (n_full_dup, n_key_dup) == (0, 0)
 ''',
 r'''# s3-03 [유효성] 재적 0, 계 > 재적
@@ -197,11 +197,11 @@ print(f"\n한국외대 2026 공시 소계열 N.C.E.: {h[(h['공시연도'] == 20
 c25 = set(h.loc[h['공시연도'] == 2025, '학과코드']); c26 = set(h.loc[h['공시연도'] == 2026, '학과코드'])
 print(f'한국외대 학과코드 2025→2026: 신규 {len(c26 - c25)}, 소멸 {len(c25 - c26)}')
 ''',
-r'''# s3-06 [적시성] 폐교·신설, 패널 연결 가능성 (전체 원본 기준)
+r'''# s3-06 [적시성] 폐교, 신설, 패널 연결 가능성 (전체 원본 기준)
 # [출처 규칙] '(출처: 노트북 §③ 셀 s3-06)'
 print('학교상태:', df['학교상태'].value_counts().to_dict())
 yrs = df.groupby(['학교코드', '학과코드'])['공시연도'].nunique()
-print('학과 수(학교코드·학과코드):', len(yrs), '| 4개년 모두 존재:', int((yrs == 4).sum()))
+print('학과 수(학교코드, 학과코드):', len(yrs), '| 4개년 모두 존재:', int((yrs == 4).sum()))
 ok = df[rate_valid(df)][['공시연도', '학교코드', '학과코드']]
 prev = ok.assign(공시연도=ok['공시연도'] + 1)
 n_pairs = len(ok.merge(prev, on=KEY))
@@ -213,11 +213,11 @@ S3_STEPS = [
 r'''# s3-11 ③-1 중복 (완전 중복 → 키 중복)
 # [출처 규칙] '(출처: 노트북 §③ 셀 s3-11)'
 assert df.duplicated().sum() == 0 and df.duplicated(KEY).sum() == 0
-log(1, '완전 중복·키 중복 확인', '0 / 0', '안내문: 완전 중복 제거를 첫 단계로', '처리 없음 (제거할 행 없음)')
+log(1, '완전 중복, 키 중복 확인', '0 / 0', '안내문: 완전 중복 제거를 첫 단계로', '처리 없음 (제거할 행 없음)')
 track('② 중복 확인 후', df);
 print('중복 0건 → 처리 없음. 행 수', len(df))
 ''',
-r'''# s3-12 ③-2 공백·표기
+r'''# s3-12 ③-2 공백, 표기
 # [출처 규칙] '(출처: 노트북 §③ 셀 s3-12)'
 df.columns = df.columns.str.strip()
 str_cols = [c for c in df.columns if pd.api.types.is_string_dtype(df[c]) or df[c].dtype == object]
@@ -227,7 +227,7 @@ for c in str_cols:
     df[c] = df[c].str.strip()
 print('공백 제거한 셀:', changed)
 assert len(df.columns) == 32
-log(2, '컬럼명·문자열 공백 제거', sum(changed.values()), f'공백 셀 {changed}', '값 의미 변화 없음, groupby·필터 안정')
+log(2, '컬럼명, 문자열 공백 제거', sum(changed.values()), f'공백 셀 {changed}', '값 의미 변화 없음, groupby, 필터 안정')
 ''',
 r'''# s3-13 ③-3 타입 확인
 # [출처 규칙] '(출처: 노트북 §③ 셀 s3-13)'
@@ -246,7 +246,7 @@ for c in ['재적 = 0', '재적 = 0 이면서 계 > 0', '재적 = 0 인데 비�
     df['flag_' + c] = FL[c]
 print(FL[['재적 = 0', '재적 = 0 이면서 계 > 0', '재적 = 0 인데 비율 기록됨(0%)', '계 > 재적 (재적 > 0)', '재계산 불일치 (> 0.01%p)', '사유합 ≠ 계']].sum().to_string())
 log(4, '재적 = 0 표시 → 표본 제외', int(FL['재적 = 0'].sum()), '비율 분모 0', '분석 표본에서 제외(행 유지)')
-log(5, '재적 = 0 이면서 계 > 0 표시', int(FL['재적 = 0 이면서 계 > 0'].sum()), '분모·분자 모순. 이 중 비율이 0%로 기록된 행 포함', '재적 0 행은 모두 y로 쓰지 않음')
+log(5, '재적 = 0 이면서 계 > 0 표시', int(FL['재적 = 0 이면서 계 > 0'].sum()), '분모, 분자 모순. 이 중 비율이 0%로 기록된 행 포함', '재적 0 행은 모두 y로 쓰지 않음')
 log(6, '계 > 재적(비율 100% 초과) 표시, 값 수정 안 함', int(FL['계 > 재적 (재적 > 0)'].sum()), '대부분 재적 5명 이하', '직전연도 최소 재적 30명으로 통제')
 log(7, '공시 비율 vs 계÷재적 불일치 표시', int(FL['재계산 불일치 (> 0.01%p)'].sum()), '최대 차이 0.005%p(반올림). 계획서 68행은 재현 안 됨', '공시값 사용(팀 결정 2026-11-11)')
 ''',
@@ -317,9 +317,9 @@ hufs_cur = cur_scope[cur_scope['학교코드'] == HUFS_CODE]
 hufs_link = pairs[pairs['both_in_scope'] & pairs['학교코드'].eq(HUFS_CODE)]
 print('한국외대 연도별 (당해 학과 수 / 연결된 학과 수):')
 print(pd.DataFrame({'당해 학과': hufs_cur.groupby('공시연도').size(), '연결': hufs_link.groupby('공시연도').size()}).fillna(0).astype(int).to_string())
-log(11, '패널 연결(두 해 모두 범위 안)', f'{len(cur_scope):,} → {n_link:,}쌍', '신설·코드 변경 학과는 전년도가 없어 자연 제외', '생존 편향을 한계로 명시')
+log(11, '패널 연결(두 해 모두 범위 안)', f'{len(cur_scope):,} → {n_link:,}쌍', '신설, 코드 변경 학과는 전년도가 없어 자연 제외', '생존 편향을 한계로 명시')
 n_h_un = len(hufs_cur) - len(hufs_link)
-log(12, '한국외대 학과코드 미연결', n_h_un, '학부·전공 개편', 'B 예측 절 평가에서 제외하고 건수 공개, B 판정은 군 단위 풀링(연결 불필요)')
+log(12, '한국외대 학과코드 미연결', n_h_un, '학부, 전공 개편', 'B 예측 절 평가에서 제외하고 건수 공개, B 판정은 군 단위 풀링(연결 불필요)')
 track('④ 연결 쌍 (당해 기준)', df.loc[df['in_scope']].merge(pairs.loc[pairs['both_in_scope'], KEY], on=KEY));
 ''',
 r'''# s3-19 ③-9 분석 표본 확정 (+ 민감도 표본)
@@ -342,18 +342,18 @@ sample = analysis_sample(pairs)
 sens = {f'재적≥{k}': analysis_sample(pairs, k) for k in MIN_ENROLL_SENS}
 sens['전체 표본(재적≥30)'] = analysis_sample(pairs, MIN_ENROLL, 'all')
 split = sample.groupby('공시연도').size()
-print('\n분석 표본 공시연도별:', split.to_dict(), f'| 학습(t=2024·2025) {split.loc[TRAIN_T].sum():,} / 테스트(t=2026) {split.loc[TEST_T]:,}')
+print('\n분석 표본 공시연도별:', split.to_dict(), f'| 학습(t=2024, 2025) {split.loc[TRAIN_T].sum():,} / 테스트(t=2026) {split.loc[TEST_T]:,}')
 print('민감도 표본 크기:', {k: len(v) for k, v in sens.items()})
 for k, v in sens.items():
     assert len(v) > 0, k
-log(13, f'직전연도 재적 ≥ {MIN_ENROLL}명, 두 해 비율 유효', f'{n_link:,} → {len(sample):,}쌍', '사전 고정 설계(소규모 비율 변동 통제)', '민감도: 재적 10·50, 전체 표본')
+log(13, f'직전연도 재적 ≥ {MIN_ENROLL}명, 두 해 비율 유효', f'{n_link:,} → {len(sample):,}쌍', '사전 고정 설계(소규모 비율 변동 통제)', '민감도: 재적 10, 50, 전체 표본')
 smp_rows = df.merge(sample[KEY], on=KEY)
 track('⑤ 분석 표본 (재적≥30)', smp_rows)
 track('민감도 (재적≥10)', df.merge(sens['재적≥10'][KEY], on=KEY))
 track('민감도 (재적≥50)', df.merge(sens['재적≥50'][KEY], on=KEY));
 ''',
-r'''# s3-20 ③-10 손대지 않는 것 · 최종 점검 · 추적표
-# [출처 규칙] '(출처: 노트북 §③ 셀 s3-20 = 정제로그 표 4·5)'
+r'''# s3-20 ③-10 손대지 않는 것, 최종 점검, 추적표
+# [출처 규칙] '(출처: 노트북 §③ 셀 s3-20 = 정제로그 표 4, 5)'
 assert len(df) == len(df_raw), '행이 지워졌음 — 표시 후 제외 원칙 위반'
 assert (df['중도탈락학생비율'].fillna(-1) == df_raw['중도탈락학생비율'].fillna(-1)).all(), 'y 값이 바뀌었음 — 보정 금지 위반'
 assert sample['prev_재적학생'].min() >= MIN_ENROLL and sample['both_in_scope'].all()

@@ -2,7 +2,7 @@
 
 S4_COMMON = r'''# s4-00 분석 공통 도구
 # [출처 규칙] 이 절의 수치는 '(출처: 노트북 §④ 셀 s4-NN)'으로 옮긴다.
-# 규칙: 무작위 분할 금지(학습 t=2024·2025, 테스트 t=2026), 고위험 컷은 학습 데이터로만, 당해 계·사유·비율은 설명 변수 금지,
+# 규칙: 무작위 분할 금지(학습 t=2024, 2025, 테스트 t=2026), 고위험 컷은 학습 데이터로만, 당해 계, 사유, 비율은 설명 변수 금지,
 #       설명 변수는 전년도(prev_) 값만 사용. 소계열은 설명 변수로 쓰지 않음(B 대상군 정의 전용).
 import warnings
 import statsmodels.formula.api as smf
@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 FIELD_REF = '인문사회계열'
 
 def prep(s, pct=HIGH_PCT):
-    """분석 표본 → 모델용 표. y 컷과 재적 구간 경계는 학습 데이터(t=2024·2025)로만 정한다."""
+    """분석 표본 → 모델용 표. y 컷과 재적 구간 경계는 학습 데이터(t=2024, 2025)로만 정한다."""
     s = s.copy()
     tr = s['공시연도'].isin(TRAIN_T)
     cut = np.percentile(s.loc[tr, '중도탈락학생비율'], pct)
@@ -82,7 +82,7 @@ print('공통 도구 준비 완료')
 '''
 
 S4 = [
-r'''# s4-01 EDA: 분석 표본의 재적·탈락 분포 (절대 = 인원(명), 비중 = 비율(%))
+r'''# s4-01 EDA: 분석 표본의 재적, 탈락 분포 (절대 = 인원(명), 비중 = 비율(%))
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-01)'
 eda = sample[['재적학생', '계', '중도탈락학생비율', 'prev_재적학생']].describe(percentiles=[.25, .5, .75, .9]).T.round(2)
 eda.index = ['당해 재적(명)', '당해 탈락 인원(명)', '당해 탈락률(%)', '전년도 재적(명)']
@@ -94,12 +94,12 @@ r'''# s4-02 y 정의: 고위험 = 당해 탈락률이 학습기간 75백분위 �
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-02)'
 M, CUT, QB = prep(sample)
 TR, TE = M[M['공시연도'].isin(TRAIN_T)], M[M['공시연도'].eq(TEST_T)]
-print(f'고위험 컷 = {CUT:.2f}% (학습 t=2024·2025, {HIGH_PCT}백분위)')
-print('전년도 재적 구간 경계(명, 학습 기준 25·50·75%):', np.round(QB, 1).tolist(), '→ Q1이 소규모(하위 25%)')
+print(f'고위험 컷 = {CUT:.2f}% (학습 t=2024, 2025, {HIGH_PCT}백분위)')
+print('전년도 재적 구간 경계(명, 학습 기준 25, 50, 75%):', np.round(QB, 1).tolist(), '→ Q1이 소규모(하위 25%)')
 print(f"고위험 비율: 학습 {TR['y'].mean() * 100:.1f}% | 테스트 {TE['y'].mean() * 100:.1f}%")
 print(f"전년도 고위험(기준선 ②) 학과 수: 테스트 {int(TE['prev_high'].sum())}개 → 이것이 k")
 ''',
-r'''# s4-03 기술통계 (가설 A, 예측 아님): 설립유형 × 수도권 4칸, 시·도 순위 — 분석 표본 전체(t=2024~2026)
+r'''# s4-03 기술통계 (가설 A, 예측 아님): 설립유형 × 수도권 4칸, 시, 도 순위 — 분석 표본 전체(t=2024~2026)
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-03)'
 four = M.pivot_table(index='prev_설립유형', columns='prev_소재지유형', values='y', aggfunc=['mean', 'size'])
 four_pct = (four['mean'] * 100).round(1); four_n = four['size']
@@ -119,7 +119,7 @@ LEAK = ['계', '중도탈락학생비율', '재적학생'] + REASONS          # 
 assert all(c.startswith('prev_') for c in src_cols) and not set(src_cols) & set(LEAK)
 Xchk = X_of(TR, True)
 assert not any(c in LEAK for c in Xchk.columns), '당해 변수가 설명 변수에 들어감'
-print('\n누수 점검 통과: 설명 변수는 모두 전년도(t−1) 값. 당해 계·사유·비율·재적 미사용')
+print('\n누수 점검 통과: 설명 변수는 모두 전년도(t−1) 값. 당해 계, 사유, 비율, 재적 미사용')
 ''',
 r'''# s4-05 가설 A 판정: 구조 변수 로지스틱 회귀 (분석 표본 t=2024~2026, 학교 군집 표준오차)
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-05)'
@@ -132,7 +132,7 @@ print(f"쌍 {int(resA.nobs):,}개, 학교 {M['school'].nunique()}개 군집")
 print(f"사립 OR {tabA.loc['priv', '오즈비']:.2f} [{tabA.loc['priv', 'CI 하한']:.2f}, {tabA.loc['priv', 'CI 상한']:.2f}] → {'충족' if okA['priv'] else '미충족'}")
 print(f"비수도권 OR {tabA.loc['nonmetro', '오즈비']:.2f} [{tabA.loc['nonmetro', 'CI 하한']:.2f}, {tabA.loc['nonmetro', 'CI 상한']:.2f}] → {'충족' if okA['nonmetro'] else '미충족'}")
 print(f'▶ 가설 A 판정: {verdict_A}')
-# 진단: 의학계열 완전 분리 — 고위험 쌍이 0개라 오즈비가 0으로 수렴. 의학계열 행을 뺀 추정과 사립·비수도권 오즈비를 비교한다.
+# 진단: 의학계열 완전 분리 — 고위험 쌍이 0개라 오즈비가 0으로 수렴. 의학계열 행을 뺀 추정과 사립, 비수도권 오즈비를 비교한다.
 med = M['field'].eq('의학계열')
 print(f"\n[진단] 의학계열 쌍 {int(med.sum())}개 중 고위험 {int(M.loc[med, 'y'].sum())}개 → 완전 분리(수렴 경고 원인)")
 _, tab_nomed = fit_A(M[~med])
@@ -146,10 +146,10 @@ with warnings.catch_warnings():
     nci = np.exp(naive.conf_int())
 print('\n[참고] 군집 무시 시 95% CI — 사립', np.round(nci.loc['priv'].values, 2), '/ 비수도권', np.round(nci.loc['nonmetro'].values, 2))
 resA_tr, tabA_tr = fit_A(TR)
-print('[참고] 학습 기간(t=2024·2025)만으로 추정 — 판정:', judge_A(tabA_tr)[0],
+print('[참고] 학습 기간(t=2024, 2025)만으로 추정 — 판정:', judge_A(tabA_tr)[0],
       '| 사립 OR', round(tabA_tr.loc['priv', '오즈비'], 2), '/ 비수도권 OR', round(tabA_tr.loc['nonmetro', '오즈비'], 2))
 ''',
-r'''# s4-06 예측 절: 모델 2개 학습 (학습 t=2024·2025)
+r'''# s4-06 예측 절: 모델 2개 학습 (학습 t=2024, 2025)
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-06)'
 clf_s, cols_s = fit_pred(TR, with_prev=False)
 clf_p, cols_p = fit_pred(TR, with_prev=True)
@@ -157,7 +157,7 @@ MODELS = {'모델 1 구조 변수': (clf_s, cols_s, False), '모델 2 구조 + �
 coef = pd.Series(clf_p.coef_[0], index=cols_p).round(3)
 print('모델 2 계수(참고, 정규화 로지스틱):'); print(coef.to_string())
 ''',
-r'''# s4-07 예측 절 평가표: 같은 k(= 기준선 ②가 고른 학과 수)에서 정밀도·재현율 (테스트 t=2026)
+r'''# s4-07 예측 절 평가표: 같은 k(= 기준선 ②가 고른 학과 수)에서 정밀도, 재현율 (테스트 t=2026)
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-07)'
 EVAL = evaluate(TE, None, MODELS)
 K = int(EVAL.loc[0, 'k'])
@@ -172,7 +172,7 @@ r'''# s4-08 오차 확인: 혼동행렬 (k 기준, 임계값 0.5 기준)
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-08)'
 p2 = clf_p.predict_proba(X_of(TE, True, cols_p))[:, 1]
 sel_k = np.zeros(len(TE), int); sel_k[np.argsort(-p2, kind='stable')[:K]] = 1
-for name, pred in [('모델 2 · 상위 k', sel_k), ('모델 2 · 임계값 0.5', (p2 >= 0.5).astype(int)), ('기준선 ②', TE['prev_high'].values)]:
+for name, pred in [('모델 2, 상위 k', sel_k), ('모델 2, 임계값 0.5', (p2 >= 0.5).astype(int)), ('기준선 ②', TE['prev_high'].values)]:
     tn, fp, fn, tp = confusion_matrix(TE['y'], pred, labels=[0, 1]).ravel()
     print(f'{name:>14}: 지원 {tp + fp:>5} | 맞힘(TP) {tp:>5} | 헛지원(FP) {fp:>5} | 놓침(FN) {fn:>5} | 정확도 {(tp + tn) / len(pred) * 100:.1f}%')
 ''',
@@ -245,7 +245,7 @@ r'''# s4-13 B 안의 예측 절 (보조 참고): ① t=2026 테스트의 한국�
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-13)'
 TE_H = TE[TE['학교코드'].eq(HUFS_CODE)]
 k_h = int(TE_H['prev_high'].sum())
-print(f'한국외대 테스트 학과 {len(TE_H)}개(연결·표본 조건 충족), 미연결로 평가 제외 {len(hufs_cur[hufs_cur["공시연도"] == 2026]) - len(TE_H)}개, k = {k_h}')
+print(f'한국외대 테스트 학과 {len(TE_H)}개(연결, 표본 조건 충족), 미연결로 평가 제외 {len(hufs_cur[hufs_cur["공시연도"] == 2026]) - len(TE_H)}개, k = {k_h}')
 EVAL_H = evaluate(TE_H, None, MODELS, k=k_h) if k_h > 0 else None
 if EVAL_H is not None:
     display(EVAL_H.round(2))
@@ -264,7 +264,7 @@ CAND = cur26.sort_values('고위험 점수', ascending=False).head(k_next)
 print(f'\n공시 2027 우선 지원 후보 상위 k = {k_next}개 (k = 2026 공시 고위험 학과 수, 재적 ≥ {MIN_ENROLL}명)')
 display(CAND[['학과명', '표준분류_소계열', '재적학생', '계', '중도탈락학생비율', '고위험 점수', '비주류 외국어 학과군']].round(3).reset_index(drop=True))
 unit = CAND['학과명'].str.contains('통합모집|계열|자유전공|융합대학') | CAND['표준분류_소계열'].eq('N.C.E.')
-print(f"후보 {k_next}개 중 통합모집·계열·자유전공 등 전공 배정 전 단위 또는 소계열 N.C.E.: {int(unit.sum())}개 | 비주류 외국어 학과군: {int(CAND['비주류 외국어 학과군'].sum())}개")
+print(f"후보 {k_next}개 중 통합모집, 계열, 자유전공 등 전공 배정 전 단위 또는 소계열 N.C.E.: {int(unit.sum())}개 | 비주류 외국어 학과군: {int(CAND['비주류 외국어 학과군'].sum())}개")
 ''',
 r'''# s4-14 민감도 ①~⑤ (사전 고정) — 결론이 뒤집히는지 한 표로
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-14)'
@@ -284,7 +284,7 @@ SENS['③ 재적≥10'] = run_all(sens['재적≥10'])
 SENS['③ 재적≥50'] = run_all(sens['재적≥50'])
 SENS['④ 고위험 상위 20%'] = run_all(sample, 80)
 SENS['④ 고위험 상위 30%'] = run_all(sample, 70)
-SENS['② 전체 표본(사이버·산업·야간 등 포함)'] = run_all(sens['전체 표본(재적≥30)'])
+SENS['② 전체 표본(사이버, 산업, 야간 등 포함)'] = run_all(sens['전체 표본(재적≥30)'])
 SENS_T = pd.DataFrame(SENS).T
 display(SENS_T.round(2))
 
@@ -302,10 +302,10 @@ KCURVE = pd.DataFrame({'k': KS,
                        '기준선 ② (전년도 탈락률 순)': [at_k(TE['y'], TE['prev_rate'], k)[1] for k in KS]}).round(1)
 display(KCURVE)
 ''',
-r'''# s4-15 가설 판정 요약 (판정 규칙: 00_문제정의_가설.md 5·7절)
+r'''# s4-15 가설 판정 요약 (판정 규칙: 00_문제정의_가설.md 5, 7절)
 # [출처 규칙] '(출처: 노트북 §④ 셀 s4-15)'
-ACTION_A = {'맞음': '사립·비수도권을 지원 배분 근거로 쓸 수 있음', '부분 맞음': '충족한 기준만 지원 배분 근거로 사용',
-            '기각': '설립유형·지역을 지원 배분 근거로 쓰지 않음'}
+ACTION_A = {'맞음': '사립, 비수도권을 지원 배분 근거로 쓸 수 있음', '부분 맞음': '충족한 기준만 지원 배분 근거로 사용',
+            '기각': '설립유형, 지역을 지원 배분 근거로 쓰지 않음'}
 ACTION_B = {'맞음': '비주류 외국어 학과군을 학업지속 지원의 우선 대상으로', '기각': "지원 근거 약함 → 문제를 '모집(입학처)'으로 재정의"}
 gap_pred = EVAL.loc[1, '정밀도(%)'] - EVAL.loc[2, '정밀도(%)']
 SUMMARY = pd.DataFrame([
@@ -332,6 +332,6 @@ inter = sorted(set(top_rate.index) & set(top_cnt.index))
 print('비율 상위 10:'); display(top_rate.round(2))
 print('인원 상위 10:'); display(top_cnt.round(2))
 print(f'교집합 {len(inter)}곳:', r1.loc[inter, '학과명'].tolist())
-print('▶ R1(부록):', '맞음 — 비율 하나로 우선순위를 정하면 안 되고 인원·비율을 함께 본다' if len(inter) < 5
+print('▶ R1(부록):', '맞음 — 비율 하나로 우선순위를 정하면 안 되고 인원, 비율을 함께 본다' if len(inter) < 5
       else '교집합 ≥ 5 — 비율 순위와 인원 순위가 대체로 같다')
 '''

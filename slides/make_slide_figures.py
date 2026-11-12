@@ -1,4 +1,4 @@
-"""발표용 그림(브랜드 색·큰 글씨, 제목 없음 — 제목은 슬라이드가 단다).
+"""발표용 그림(브랜드 색, 큰 글씨, 제목 없음 — 제목은 슬라이드가 단다).
 
 실행: .venv\\Scripts\\python slides/make_slide_figures.py   (노트북을 끝까지 실행해 data/processed/slides_data.json이 있어야 함)
 수치: data/processed/slides_data.json (노트북 부록 F 셀 sZ-01이 저장) — 손으로 옮긴 수치 없음.
@@ -17,7 +17,7 @@ D = json.loads((ROOT / "data" / "processed" / "slides_data.json").read_text(enco
 OUT = ROOT / "slides" / "figures"
 OUT.mkdir(parents=True, exist_ok=True)
 
-BRAND, RISK, INK, MUTED, RULE, SOFT = "#3A59D1", "#E8603C", "#222222", "#5B6472", "#C9CED6", "#B9BEC8"
+BRAND, RISK, INK, MUTED, RULE, SOFT = "#3A59D1", "#E8603C", "#222222", "#222222", "#C9CED6", "#B9BEC8"
 plt.rcParams.update({
     "font.family": "NanumGothic", "axes.unicode_minus": False, "font.size": 15,
     "axes.spines.top": False, "axes.spines.right": False, "axes.edgecolor": RULE, "axes.labelcolor": MUTED,
@@ -75,7 +75,7 @@ save(fig, "s06_forest_A.png")
 # ③ 가설 B: 한국외대 학과군 비교 + 95% 구간 (슬라이드 8)
 G = D["groups_ci"]
 bars = [("한국외대\n비주류 외국어 학과군", G["hufs_target"], BRAND), ("한국외대\n교내 다른 학과", G["hufs_other"], SOFT),
-        ("전국(한국외대 제외)\n같은 소계열 · 참고", G["national_same"], "#DDE1E8")]
+        ("전국(한국외대 제외)\n같은 소계열, 참고", G["national_same"], "#DDE1E8")]
 fig, ax = plt.subplots(figsize=(10.0, 6.6))
 for i, (lab, g, col) in enumerate(bars):
     ax.bar(i, g["rate"], color=col, width=0.6)

@@ -49,7 +49,7 @@ function cover({ kicker, title, subtitle, info, date, team, mark }) {
         new TableCell({
           width: { size: infoW[1], type: WidthType.DXA }, verticalAlign: VerticalAlign.CENTER,
           margins: { top: 80, bottom: 80, left: 160, right: 100 },
-          // 값은 문자열 또는 docx 런 배열(링크·그림 포함 가능)
+          // 값은 문자열 또는 docx 런 배열(링크, 그림 포함 가능)
           children: [new Paragraph({ style: 'TableText', children: Array.isArray(v) ? v : [new TextRun(v)] })],
         }),
       ],

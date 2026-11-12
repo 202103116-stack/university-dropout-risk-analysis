@@ -1,16 +1,16 @@
-# 빅데이터분석 팀 프로젝트2 — 14조 · 중도탈락 고위험 학과 예측
+# 빅데이터분석 팀 프로젝트2 — 14조, 중도탈락 고위험 학과 예측
 
-> 다음 학년도 중도탈락 고위험 학과는 어디인가 — 학업지속 지원 대상 학과 선정을 위한 대학알리미 학과별 중도탈락 패널(2023~2026) 분석·예측
+> 다음 학년도 중도탈락 고위험 학과는 어디인가 — 학업지속 지원 대상 학과 선정을 위한 대학알리미 학과별 중도탈락 패널(2023~2026) 분석, 예측
 
 | 항목 | 내용 |
 |---|---|
 | 의사결정자 | 한국외국어대학교 학사종합지원센터 (보조: 입학처) |
 | 결정 | 다음 학년도 학업지속 지원(상담, 학습지원, 복학 안내)을 우선 배치할 학과 |
-| 질문 | ① 전국 일반 대학 학과 중 어떤 설립유형·지역에서 고위험(상위 25%)이 많은가 (가설 A)<br>② 그중 한국외대에서는 어떤 학과군이 고위험인가 (가설 B) |
+| 질문 | ① 전국 일반 대학 학과 중 어떤 설립유형, 지역에서 고위험(상위 25%)이 많은가 (가설 A)<br>② 그중 한국외대에서는 어떤 학과군이 고위험인가 (가설 B) |
 | 범위 | 전국 일반 대학 주간 학과. 50,081행, 원본의 88.9% (계획서 기준값 — 노트북 재실행으로 확정 필요). 전체 표본은 민감도 분석용 |
 | 데이터 | 교육부 대학알리미 중도탈락 학생 현황(대학, 학과별), 공공데이터포털 15164570, 공공누리 제1유형 |
 | 팀 | 정승엽, 박유진, 신효주 |
-| 노트북 | [Colab (정승엽 · 팀 정본)](https://colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc?usp=sharing) · [Colab (박유진, 재현성 확인)](https://colab.research.google.com/drive/1Tded6jGpKo6t-hRTiHinln37t0vluC7d?usp=sharing) |
+| 노트북 | [Colab (정승엽, 팀 정본)](https://colab.research.google.com/drive/1JCE1qZSWkixXybo86cDwFJpl4_n-Tbmc?usp=sharing), [Colab (박유진, 재현성 확인)](https://colab.research.google.com/drive/1Tded6jGpKo6t-hRTiHinln37t0vluC7d?usp=sharing) |
 | 저장소 | [GitHub](https://github.com/202103116-stack/university-dropout-risk-analysis) |
 | 기준 문서 | 안내문 기준: [docs/기준_정리.md](docs/기준_정리.md)<br>가설: [00_문제정의_가설.md](00_문제정의_가설.md) (태그 `hypotheses-locked-v2`, 보완 `hypotheses-locked-v3`) |
 
@@ -35,7 +35,7 @@ TeamProject2_14_DroppingOut/
 │   ├── 정제로그.md             ← ③ 처리, 건수, 근거, 영향
 │   ├── AI활용기록.md           ← 전 단계 공통
 │   ├── 재현성_확인표.md         ← 부록 A
-│   └── 기여도표.md             ← 부록 B (단계별 담당자·검토자)
+│   └── 기여도표.md             ← 부록 B (단계별 담당자, 검토자)
 ├── notebook/
 │   ├── 팀프로젝트2_14조.ipynb   ← ①~⑤ + 부록 골격 (Colab이 정본)
 │   ├── README.md
@@ -54,15 +54,15 @@ TeamProject2_14_DroppingOut/
 |---|---|---|---|
 | ① 문제 정의 | 11/8 제출 → 11/11 v2 고정 | 의사결정 질문, 가설, 반대 결과 처리 규칙 | `00_문제정의_가설.md`, 태그 `hypotheses-locked`, `hypotheses-locked-v2` |
 | (피드백) | 11/13 | 교수 피드백 반영 (주제와 데이터 조정 가능) | 변경 이력, AI 활용 기록 |
-| ② 수집 | 11/13 이후 | 원자료 재다운로드, 행·열 수 대조, 범위 정의 | `docs/수집_기록표.md` |
+| ② 수집 | 11/13 이후 | 원자료 재다운로드, 행, 열 수 대조, 범위 정의 | `docs/수집_기록표.md` |
 | ③ 정제 | | 품질 6대 기준 진단, 범위 확정, 정제 | `logs/정제로그.md`, 기대값 assert |
-| ④ 분석 | | EDA, 기술통계, 로지스틱 회귀, 기준선, 민감도, A·B 판정 | 노트북 ④, 기준선 비교표 |
-| ⑤ 발표 | 발표 전날 23:59 제출, 14·15주차 발표 `[확인 필요]` | 차트 3종, 권고·근거·한계, '믿기 어려운 이유' | `slides/`, `report/` |
+| ④ 분석 | | EDA, 기술통계, 로지스틱 회귀, 기준선, 민감도, A, B 판정 | 노트북 ④, 기준선 비교표 |
+| ⑤ 발표 | 발표 전날 23:59 제출, 14, 15주차 발표 `[확인 필요]` | 차트 3종, 권고, 근거, 한계, '믿기 어려운 이유' | `slides/`, `report/` |
 
 ## 제출 파일 (`submission/`, `slides/`)
 | 제출물 | 파일 | 만드는 법 |
 |---|---|---|
-| 1. 발표 슬라이드 | `slides/14조_발표.pdf` (`.pptx` 원본, 발표자 노트 = 대본), 대본·예상 질문 `slides/발표대본.md` | `node slides/build_slides.js` → `python -X utf8 slides/embed_fonts.py` → `slides/export_pdf.ps1` |
+| 1. 발표 슬라이드 | `slides/14조_발표.pdf` (`.pptx` 원본, 발표자 노트 = 대본), 대본, 예상 질문 `slides/발표대본.md` | `node slides/build_slides.js` → `python -X utf8 slides/embed_fonts.py` → `slides/export_pdf.ps1` |
 | 2. 노트북 | `notebook/팀프로젝트2_14조.ipynb`, Colab 링크 | 생성 스크립트 `notebook/tools/make_nb_v2.py` |
 | 3. 원자료 | `data/raw/*.csv` + 수집 기록표 | — |
 | 4. 정제 로그 | `submission/14조_정제로그.pdf` | `node report/docx/make_submissions.js` → `finalize.ps1` |
@@ -86,11 +86,11 @@ TeamProject2_14_DroppingOut/
 | 항목 | 배점 | 핵심 근거 파일 |
 |---|---|---|
 | 문제 정의 | 15 | `00_문제정의_가설.md` |
-| 수집·정제 | 20 | `docs/수집_기록표.md`, `docs/data_description.md`, `logs/정제로그.md` |
-| 분석·예측 | 25 | 노트북 ④ (기준선 비교 필수) |
+| 수집, 정제 | 20 | `docs/수집_기록표.md`, `docs/data_description.md`, `logs/정제로그.md` |
+| 분석, 예측 | 25 | 노트북 ④ (기준선 비교 필수) |
 | 시각화 | 15 | 노트북 ⑤, `notebook/figures/` |
-| 해석·한계 | 15 | 노트북 ⑤, 보고서 |
-| 발표·Q&A | 10 | `slides/발표_구성.md` |
+| 해석, 한계 | 15 | 노트북 ⑤, 보고서 |
+| 발표, Q&A | 10 | `slides/발표_구성.md` |
 
 감점 항목:
 - AI 활용 로그 미제출: −10
