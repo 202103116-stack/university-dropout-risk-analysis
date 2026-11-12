@@ -4,7 +4,7 @@ import json
 def _f(x):
     return float(x) if x is not None else None
 fl_scope = FL[df['in_scope']]
-r1p_out = r1p.reset_index()[['학과명', '탈락합', '재적합', '비율', '대상']].rename(columns={'대상': 'target'})
+r1p_out = r1p.reset_index()[['학과명', '탈락합', '재적합', '비율', '대상', '해석불가']].rename(columns={'대상': 'target', '해석불가': 'flag'})
 grp_ci = {}
 for key_, d_ in [('hufs_target', H[H['target']]), ('hufs_other', H[~H['target']]), ('national_same', NAT)]:
     lo_, hi_ = boot_one(d_)

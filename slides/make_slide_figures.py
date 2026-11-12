@@ -35,30 +35,21 @@ def save(fig, name):
 
 
 # ① 한국외대 학과별 탈락 인원 × 탈락률 (슬라이드 5)
-deps = D["hufs_depts"]
-FLAGGED = set(D["r1_adj"]["flagged_codes_names"])   # 비율 해석 불가 단위(연평균 재적 < 30명, 노트북 sE-02)
+deps = [d for d in D["hufs_depts"] if not d["flag"]]   # 비율 해석 불가 단위(연평균 재적 < 30명, 노트북 sE-02)는 그림에서 뺀다
 fig, ax = plt.subplots(figsize=(11.5, 7.0))
 for tgt, col, lab in [(False, SOFT, "교내 다른 학과"), (True, BRAND, "비주류 외국어 학과군")]:
-    sel = [d for d in deps if d["target"] == tgt and d["학과명"] not in FLAGGED]
+    sel = [d for d in deps if d["target"] == tgt]
     ax.scatter([d["탈락합"] for d in sel], [d["비율"] for d in sel], s=[max(18, min(320, d["재적합"] / 6)) for d in sel],
                color=col, alpha=0.85, edgecolor="white", linewidth=1.0, label=lab, zorder=3 if tgt else 2)
-fl = [d for d in deps if d["학과명"] in FLAGGED]
-ax.scatter([d["탈락합"] for d in fl], [d["비율"] for d in fl], s=60, facecolor="none", edgecolor=MUTED, linewidth=1.4,
-           label="비율 해석 불가 단위 (개편 전 잔류 · 신설 초기 추정)", zorder=4)
-top_rate = {d["학과명"] for d in D["r1"]["top_rate"][:3]}
-top_cnt = {d["학과명"] for d in D["r1"]["top_cnt"][:3]}
-seen = set()
-for d in deps:
-    key = (d["탈락합"], round(d["비율"], 1))
-    if (d["학과명"] in top_rate or d["학과명"] in top_cnt) and key not in seen:
-        seen.add(key)
-        col = MUTED if d["학과명"] in FLAGGED else (RISK if d["학과명"] in top_rate else INK)
-        ax.annotate(f"{d['학과명']} (재적 {d['재적합']:,}명)", (d["탈락합"], d["비율"]), xytext=(8, 6), textcoords="offset points", fontsize=13, color=col)
-ax.set_yscale("symlog", linthresh=10)
-ax.yaxis.set_major_locator(FixedLocator([0, 5, 10, 20, 50, 100])); ax.yaxis.set_major_formatter(PLAIN); ax.yaxis.set_minor_locator(FixedLocator([]))
+top_rate = sorted(deps, key=lambda d: (-d["비율"], -d["탈락합"]))[:3]
+top_cnt = sorted(deps, key=lambda d: (-d["탈락합"], -d["비율"]))[:3]
+for d in top_rate + [x for x in top_cnt if x not in top_rate]:
+    col = RISK if d in top_rate else INK
+    ax.annotate(f"{d['학과명'].replace('[통합모집]', '')} (재적 {d['재적합']:,}명)", (d["탈락합"], d["비율"]), xytext=(8, 6), textcoords="offset points", fontsize=13, color=col)
+ax.set_ylim(0, max(d["비율"] for d in deps) * 1.12)
 ax.set_xlabel("합산 탈락 인원 (명, 공시 2024~2026)", fontsize=15)
-ax.set_ylabel("합산 탈락률 (%, 10% 이상은 로그 눈금)", fontsize=15)
-ax.legend(frameon=True, facecolor="white", edgecolor="white", framealpha=1, loc="upper right", bbox_to_anchor=(1.0, 0.78), fontsize=13, markerscale=0.8)
+ax.set_ylabel("합산 탈락률 (%)", fontsize=15)
+ax.legend(frameon=True, facecolor="white", edgecolor="white", framealpha=1, loc="upper right", fontsize=13, markerscale=0.8)
 save(fig, "s05_hufs_count_rate.png")
 
 # ② 가설 A 오즈비 (슬라이드 6)

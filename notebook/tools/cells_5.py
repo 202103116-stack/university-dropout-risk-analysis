@@ -157,20 +157,23 @@ ax.set_title(f'가설 B: 비주류 외국어 학과군이 오히려 낮다 → {
 finish(fig, 's5-c09', 'hufs_groups', f"교내 다른 학과보다 {abs(resB['차이(%p)']):.2f}%p 낮고(구간 [{resB['95% 하한']:.2f}, {resB['95% 상한']:.2f}]), 전국 같은 소계열보다도 낮다 — 어문 학과군을 이탈 지원 우선 대상으로 볼 근거 없음 → '모집(입학처)' 관점으로 재정의")
 ''',
 r'''# s5-c10 [단독] 한국외대 학과별 인원(명) × 비율(%) — 2024~2026 합산, 비주류 외국어 학과군 강조
-r1p = H.groupby('학과코드').agg(탈락합=('계', 'sum'), 재적합=('재적학생', 'sum'), 대상=('target', 'max'), 학과명=('학과명', 'last'))
+r1p = H.groupby('학과코드').agg(탈락합=('계', 'sum'), 재적합=('재적학생', 'sum'), 대상=('target', 'max'), 학과명=('학과명', 'last'), 연수=('공시연도', 'nunique'))
 r1p['비율'] = r1p['탈락합'] / r1p['재적합'] * 100
+# 비율 해석 불가: 연평균 재적 < MIN_ENROLL(30명) — '재적 1명 · 탈락 1명 = 100%' 같은 개편 · 신설 단위 (근거는 부록 E 셀 sE-02)
+r1p['해석불가'] = r1p['재적합'] / r1p['연수'] < MIN_ENROLL
+ok_r = r1p[~r1p['해석불가']]
 fig, ax = plt.subplots(figsize=(8, 5.2))
 for flag, c_, lab_ in [(False, GRAY, '다른 학과'), (True, C1, '비주류 외국어 학과군')]:
-    d_ = r1p[r1p['대상'].eq(flag)]
+    d_ = ok_r[ok_r['대상'].eq(flag)]
     ax.scatter(d_['탈락합'], d_['비율'], s=np.clip(d_['재적합'] / 8, 10, 200), color=c_, alpha=0.8, edgecolor='white', linewidth=0.8, label=lab_)
-lab_pts = pd.concat([r1p.nlargest(3, '탈락합'), r1p.nlargest(3, '비율')]).drop_duplicates(subset=['탈락합', '비율'])
+lab_pts = pd.concat([ok_r.nlargest(3, '탈락합'), ok_r.nlargest(3, '비율')]).drop_duplicates(subset=['탈락합', '비율'])
 for _, r_ in lab_pts.iterrows():
     ax.annotate(r_['학과명'], (r_['탈락합'], r_['비율']), xytext=(5, 4), textcoords='offset points', fontsize=8, color='#52514e')
-ax.set_yscale('symlog', linthresh=10); ax.yaxis.set_major_locator(FixedLocator([0, 5, 10, 20, 50, 100])); ax.yaxis.set_major_formatter(PLAIN); ax.yaxis.set_minor_locator(FixedLocator([]))
-ax.set_xlabel('합산 탈락 인원 (명)'); ax.set_ylabel('합산 탈락률 (%, 10% 이상 로그 눈금)')
-ax.set_title('한국외대: 비율 상위와 인원 상위는 다른 학과 (점 크기 = 재적)'); ax.legend(frameon=False)
-inter10 = set(r1p.sort_values(['비율', '탈락합'], ascending=False).head(10).index) & set(r1p.sort_values(['탈락합', '비율'], ascending=False).head(10).index)
-finish(fig, 's5-c10', 'hufs_count_rate', f'비율 상위 10과 인원 상위 10의 교집합 {len(inter10)}곳 — 비율 1위권은 재적 1~5명 학과(부록 E)')
+ax.set_xlabel('합산 탈락 인원 (명)'); ax.set_ylabel('합산 탈락률 (%)')
+ax.set_title(f"한국외대: 비율 상위와 인원 상위는 다른 학과 (점 크기 = 재적, 연평균 재적 {MIN_ENROLL}명 이상)"); ax.legend(frameon=False)
+inter10 = set(ok_r.sort_values(['비율', '탈락합'], ascending=False).head(10).index) & set(r1p.sort_values(['탈락합', '비율'], ascending=False).head(10).index)
+print(f"그림에서 뺀 비율 해석 불가 단위: {int(r1p['해석불가'].sum())}개 (연평균 재적 {MIN_ENROLL}명 미만, 근거 sE-02) — 행과 인원 순위는 그대로")
+finish(fig, 's5-c10', 'hufs_count_rate', f"해석 가능한 단위만 봐도 비율 상위 10과 인원 상위 10의 교집합 {len(inter10)}곳 — 비율과 인원은 다른 학과를 가리킨다(원판정 sE-01, 보정 sE-02)")
 ''',
 r'''# s5-c11 [단독] 한국외대 대상군 vs 전국 같은 소계열 — 연도별 합산 비율 (B 참고 해석)
 yr = pd.DataFrame({'한국외대 대상군': HT.groupby('공시연도').apply(pooled, include_groups=False),
