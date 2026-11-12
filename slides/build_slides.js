@@ -465,7 +465,9 @@ pres.addSection({ title: "부록" });
   title(s, "부록 B. 기여도표");
   headline(s, "안내문 5단계별 담당자와 검토자");
   const st = [["① 문제 정의", "의사결정 질문, 가설 A, B, 판정 규칙 고정"], ["② 수집", "원자료, 출처, 이용 조건, 범위 정의, 측정 척도"], ["③ 정제", "품질 6대 기준 진단, 범위 확정, 정제 로그"], ["④ 분석", "EDA, 모델, 기준선, 민감도, 가설 판정"], ["⑤ 발표", "차트 3종, 권고, 근거, 한계, 슬라이드, 발표"], ["공통", "AI 활용 로그, 재현성 확인"]];
-  const rows = [[HD("단계"), HD("세부 작업"), HD("담당자"), HD("검토자")]].concat(st.map(([a, b]) => [CELL(a, { b: true }), CELL(b), CELL("[팀 입력]", { al: "center", color: C.muted }), CELL("[팀 입력]", { al: "center", color: C.muted })]));
+  const WHO = { "① 문제 정의": ["", ""], "② 수집": ["", "정승엽"], "③ 정제": ["정승엽", ""], "④ 분석": ["정승엽", ""], "⑤ 발표": ["", "정승엽"], "공통": ["", ""] };  // logs/기여도표.md와 같게, 빈칸은 [팀 입력]
+  const who = (v) => (v ? CELL(v, { al: "center" }) : CELL("[팀 입력]", { al: "center", color: C.muted }));
+  const rows = [[HD("단계"), HD("세부 작업"), HD("담당자"), HD("검토자")]].concat(st.map(([a, b]) => [CELL(a, { b: true }), CELL(b), who(WHO[a][0]), who(WHO[a][1])]));
   s.addTable(rows, { ...TBL, x: MX, y: 2.75, w: CW, colW: [3.0, 9.4, 3.0, 3.0], fontSize: 15, rowH: 0.7 });
   foot(s, "logs/기여도표.md (제출물 6번)");
 }
