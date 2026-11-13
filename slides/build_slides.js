@@ -442,6 +442,47 @@ pres.addSection({ title: "그래서" });
 
 // ================================================================ 부록
 pres.addSection({ title: "부록" });
+// 부록 0. 그림 모음: 본문에 쓰지 않은 후보 차트를 모아 두고, 클릭하면 크게 보는 장으로 이동(PDF에서도 링크 동작)
+const NB_FIG = (f) => path.join(ROOT, "notebook", "figures", f);
+const GALLERY = [
+  ["s5-c01", "cand_c01_count_x_rate.png", "전국 탈락 인원 × 탈락률"],
+  ["s5-c02", "cand_c02_size_box.png", "재적 규모별 탈락률 분포"],
+  ["s5-c03", "cand_c03_missing_year.png", "연도별 결측률, 재적 0 건수"],
+  ["s5-c05", "cand_c05_persistence.png", "작년 탈락률 × 올해 탈락률"],
+  ["s5-c06", "cand_c06_sector_region.png", "설립유형 × 수도권 고위험 비율"],
+  ["s5-c07", "cand_c07_sido.png", "시, 도별 고위험 비율"],
+  ["s5-c11", "cand_c11_hufs_vs_nat_year.png", "연도별 한국외대 학과군 비교"],
+  ["s5-c13", "cand_c13_k_curve.png", "지원 학과 수 k에 따른 정밀도"],
+  ["s5-c14", "cand_c14_sensitivity.png", "민감도 요약"],
+];
+const G_PAGE = PAGE + 1;                     // 그림 모음 장 번호
+const D_PAGE = (i) => G_PAGE + 1 + i;          // 그림별 확대 장 번호
+{
+  const s = slide("부록");
+  title(s, "부록. 그림 모음 (클릭하면 크게 보기)");
+  headline(s, "필수 차트 3종을 고르기 전에 그려 본 후보 차트 — 그림을 누르면 크게, 확대 장에서 '← 그림 모음으로'를 누르면 돌아온다", 1.8, MX, CW, 20);
+  const cw = (CW - 0.5) / 3, ch = 2.55;
+  GALLERY.forEach(([cid, file, cap], i) => {
+    const x = MX + (i % 3) * (cw + 0.25), y = 2.55 + Math.floor(i / 3) * (ch + 0.12);
+    box(s, x, y, cw, ch, { fill: C.white, line: C.rule, lw: 1, r: 0.08 });
+    const [pw, ph] = pngSize(NB_FIG(file)), r = pw / ph;
+    let w = cw - 0.3, h = w / r;
+    if (h > ch - 0.6) { h = ch - 0.6; w = h * r; }
+    s.addImage({ path: NB_FIG(file), x: x + (cw - w) / 2, y: y + 0.12, w, h, altText: cap, hyperlink: { slide: D_PAGE(i), tooltip: `${cap} 크게 보기` } });
+    T(s, `${i + 1}. ${cap}`, { x: x + 0.15, y: y + ch - 0.45, w: cw - 0.3, h: 0.38, fontSize: 13, align: "center", valign: "middle",
+      hyperlink: { slide: D_PAGE(i), tooltip: `${cap} 크게 보기` } });
+  });
+  foot(s, `노트북 §⑤ 후보 차트 갤러리(s5-c01~c14), 선택 기준과 점수는 노트북 ⑤-2`);
+}
+GALLERY.forEach(([cid, file, cap], i) => {
+  const s = slide("부록");
+  title(s, `그림 ${i + 1}. ${cap}`, { w: 15 });
+  T(s, "← 그림 모음으로", { x: R - 3.2, y: 0.93, w: 3.2, h: 0.45, fontFace: F.bodyB, bold: true, fontSize: 15, color: C.brand, align: "right", valign: "middle",
+    hyperlink: { slide: G_PAGE, tooltip: "그림 모음으로 돌아가기" } });
+  headline(s, (D.so_what[cid] || "").replace(/ — /g, " → "), 1.8, MX, CW, 18);
+  fig(s, NB_FIG(file), MX, 2.6, CW, 7.6, cap, "center");
+  foot(s, `${SRC}, 노트북 §⑤ 셀 ${cid}`);
+});
 // A. 재현성
 {
   const s = slide("부록");
@@ -522,6 +563,16 @@ pres.addSection({ title: "부록" });
   s.addTable(ad, { ...TBL, x: 10.7, y: 2.75, w: 8.5, colW: [4.4, 1.3, 1.4, 1.4], fontSize: 12, rowH: 0.5 });
   readBar(s, "규칙", "재적(학년도 학적 보유자)과 탈락(그 1년간 떠난 수)은 같은 사람을 센다 → 1/1 = 남은 한 명이 떠남. 연평균 재적 30명 미만은 비율 순위에서만 빼고 행, 인원 순위는 그대로 둔다", 8.55);
   foot(s, "노트북 부록 E 셀 sE-02, 원판정(sE-01)은 바꾸지 않음, 추정은 학과코드의 재적 추이, 소멸, 탈락 사유(미복학)에 근거");
+}
+
+// 마무리
+{
+  const s = slide("표지");
+  T(s, "감사합니다", { x: 0.7, y: 3.0, w: 18.6, h: 1.6, fontFace: F.disp, fontSize: 88, align: "center", valign: "middle" });
+  T(s, "Q&A", { x: 0.7, y: 4.75, w: 18.6, h: 1.2, fontFace: F.disp, fontSize: 60, color: C.brand, align: "center", valign: "middle" });
+  line(s, 6.5, 6.35, 13.5, 6.35, { color: C.rule, w: 1.25 });
+  T(s, "다음 학년도 중도탈락 고위험 학과는 어디인가", { x: 0.7, y: 6.6, w: 18.6, h: 0.55, fontFace: F.bodyB, bold: true, fontSize: 22, align: "center", valign: "middle" });
+  T(s, "빅데이터분석 14조   정승엽, 박유진, 신효주", { x: 0.7, y: 7.2, w: 18.6, h: 0.5, fontSize: 18, align: "center", valign: "middle" });
 }
 
 pres.writeFile({ fileName: OUT }).then(() => console.log("written", OUT, "slides", PAGE));
