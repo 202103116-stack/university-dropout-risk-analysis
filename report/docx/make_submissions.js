@@ -167,15 +167,16 @@ const DOCS = [
   { file: '14조_기여도표', title: '기여도표', sub: '안내문 5단계별 담당자, 검토자', body: (l) => md2docx('logs/기여도표.md', l) },
 ];
 
-const build = (name, front, body) => {
+const build = (name, front, body, dir = OUT) => {
   const doc = new Document({
     creator: '14조', title: name, styles: S.styles, numbering: S.numbering, features: { updateFields: true },
     sections: [S.frontSection(front), S.bodySection(body)],
   });
-  return Packer.toBuffer(doc).then((buf) => { const f = path.join(OUT, `${name}.docx`); fs.writeFileSync(f, buf); console.log('written', f); });
+  return Packer.toBuffer(doc).then((buf) => { const f = path.join(dir, `${name}.docx`); fs.writeFileSync(f, buf); console.log('written', f); });
 };
 
-(async () => {
+module.exports = { md2docx, COVER, MAIN, build, cover };
+if (require.main === module) (async () => {
   for (const d of DOCS) {
     const c = cover(COVER('빅데이터분석 팀 프로젝트2 제출물', d.title, MAIN));
     await build(d.file, c, d.body(1));
