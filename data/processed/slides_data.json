@@ -1,5 +1,5 @@
 {
- "run_at": "2026-11-12 22:44",
+ "run_at": "2026-11-19 11:15",
  "versions": {
   "python": "3.13.14",
   "pandas": "3.0.6",
@@ -22,6 +22,7 @@
  "n_rate_na": 6372,
  "n_zero_enr": 2500,
  "n_zero_rate_recorded": 1697,
+ "n_zero_rate_with_drop": 728,
  "n_over100": 172,
  "over100_small_pct": 87.20930232558139,
  "max_gap": 0.005048732943469858,

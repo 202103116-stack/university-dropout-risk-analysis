@@ -16,7 +16,7 @@ EXPORT = {
     'n_raw': len(df_raw), 'n_cols': df_raw.shape[1], 'raw_by_year': {int(k): int(v) for k, v in year_n.items()},
     # ③ 정제 (s3-01 ~ s3-19)
     'miss_by_year': {int(k): float(v) for k, v in miss_by_year.items()},
-    'n_rate_na': int(n_rate_na), 'n_zero_enr': int(f0['재적 = 0'].sum()), 'n_zero_rate_recorded': int(f0['재적 = 0 인데 비율 기록됨(0%)'].sum()),
+    'n_rate_na': int(n_rate_na), 'n_zero_enr': int(f0['재적 = 0'].sum()), 'n_zero_rate_recorded': int(f0['재적 = 0 인데 비율 기록됨(0%)'].sum()), 'n_zero_rate_with_drop': int(n_z0_drop),
     'n_over100': int(f0['계 > 재적 (재적 > 0)'].sum()), 'over100_small_pct': float((over['재적학생'] <= 5).mean() * 100),
     'max_gap': float(gap.max()), 'g5': int(len(g5)), 'g5_mid_split': int((g5['중계열수'] > 1).sum()), 'g5_sub_split': int((g5['소계열수'] > 1).sum()),
     'nce_sub_pct': float(f0['소계열 N.C.E.'].mean() * 100), 'hufs_nce26': int(h[(h['공시연도'] == 2026) & (h['표준분류_소계열'] == 'N.C.E.')]['학과코드'].nunique()),
