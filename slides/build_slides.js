@@ -268,8 +268,8 @@ pres.addSection({ title: "했다" });
       T(s, `${n0(n)}쌍`, { x: ix + 1.5, y, w: rw - 1.5, h: 0.5, fontFace: F.bodyB, bold: true, fontSize: 18, color: col, align: "right", valign: "middle" });
     };
     const pair = (a, b, col, y) => {
-      [[a, ix], [b, bx]].forEach(([yr, x]) => T(s, String(yr), { x, y, w: yw, h: 0.95, fontFace: F.bodyB, bold: true, fontSize: 46, color: col, align: "center", valign: "middle" }));
-      arrow(s, ix + yw + 0.1, y + 0.48, bx - 0.1, y + 0.48, col);
+      [[a, ix], [b, bx]].forEach(([yr, x]) => T(s, String(yr), { x, y, w: yw, h: 0.95, fontFace: F.num, bold: true, fontSize: 46, color: col, align: "center", valign: "middle" }));
+      line(s, ix + yw + 0.1, y + 0.48, bx - 0.1, y + 0.48, { color: col, w: 4, arrow: "triangle" });
     };
     head("학습 TRAIN", D.n_train, C.brand, 3.0);
     pair(2023, 2024, C.brand, 3.7);
