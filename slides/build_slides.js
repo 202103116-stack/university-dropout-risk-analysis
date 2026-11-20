@@ -249,27 +249,55 @@ pres.addSection({ title: "봤다" });
 // ================================================================ 4. 했다: 정제 추적
 pres.addSection({ title: "했다" });
 {
-  const s = slide("했다", `정제에서는 행을 하나도 지우지 않았습니다. 문제가 있는 행은 표시만 하고 분석 표본에서 뺐고, 단계마다 남은 수를 기록했습니다. 범위 안 ${n0(D.n_scope)}행을 전년과 당해로 이으면 ${n0(D.n_link)}쌍이고, 두 해 모두 탈락률이 유효하고 전년도 재적이 30명 이상인 ${n0(D.n_sample)}쌍이 최종 표본입니다. 2024, 2025년 공시로 학습하고 2026년 공시로 시험했습니다. 계획서에 적은 사전 점검 값과 같은지 assert로 확인했고 모두 통과했습니다.`);
+  const s = slide("했다", `정제에서는 행을 하나도 지우지 않았습니다. 문제가 있는 행은 표시만 하고 분석 표본에서 뺐고, 단계마다 남은 수를 기록했습니다. 범위 안 ${n0(D.n_scope)}행을 전년과 당해로 이으면 ${n0(D.n_link)}쌍이고, 두 해 모두 탈락률이 유효하고 전년도 재적이 30명 이상인 ${n0(D.n_sample)}쌍이 최종 표본입니다. 2023→2024, 2024→2025 쌍으로 학습하고 2025→2026 쌍으로 시험했습니다. 계획서에 적은 사전 점검 값과 같은지 assert로 확인했고 모두 통과했습니다.`);
   title(s, "정제: 행은 지우지 않고 표시만");
   headline(s, `원본 ${n0(D.n_raw)}행에서 ${n0(D.n_sample)}쌍으로 — 단계마다 남은 수와 이유를 기록했다`);
   const steps = [["원본 전체", D.n_raw, "행"], ["범위 안 (일반 대학 주간)", D.n_scope, "행"], ...D.funnel.map((r, i) => [["연결 쌍 (두 해 모두 범위 안)", "+ 당해 탈락률 유효", "+ 전년도 탈락률 유효", "분석 표본 (전년도 재적 ≥ 30명)"][i], r.n, "쌍"])];
-  const maxV = D.n_raw, x0 = MX + 4.6, wMax = 7.6;
+  const maxV = D.n_raw, x0 = MX + 3.75, wMax = 3.9;
   steps.forEach(([lab, v, unit], i) => {
     const y = 2.75 + i * 1.08, last = i === steps.length - 1;
-    T(s, lab, { x: MX, y, w: 4.45, h: 0.8, fontSize: 15.5, fontFace: last ? F.bodyB : F.body, bold: last, valign: "middle", align: "right" });
+    T(s, lab, { x: MX, y, w: 3.6, h: 0.8, fontSize: 14, fontFace: last ? F.bodyB : F.body, bold: last, valign: "middle", align: "right" });
     box(s, x0, y + 0.1, Math.max(0.2, (v / maxV) * wMax), 0.6, { fill: last ? C.brand : (i < 2 ? C.soft : "CBD3E6"), r: 0.06 });
-    T(s, `${n0(v)}${unit}`, { x: x0 + (v / maxV) * wMax + 0.15, y, w: 2.2, h: 0.8, fontFace: F.bodyB, bold: true, fontSize: 17, color: last ? C.brand : C.ink, valign: "middle" });
+    T(s, `${n0(v)}${unit}`, { x: x0 + (v / maxV) * wMax + 0.12, y, w: 1.9, h: 0.8, fontFace: F.bodyB, bold: true, fontSize: 16, color: last ? C.brand : C.ink, valign: "middle" });
   });
+  // 가운데: 학습 / 시험 분리 도식 (시간 순, 무작위 분할 아님)
+  {
+    const px = 10.7, pw = 4.7, ix = px + 0.3, yw = 1.6, ax = ix + yw, bx = ix + yw + 0.6;
+    const TEST_TINT = "FDEDE6";
+    card(s, px, 2.65, pw, 6.85);
+    sub(s, "학습과 시험 분리", ix, 2.82, pw - 0.6);
+    const head = (lab, n, col, y) => {
+      pill(s, lab, ix, y + 0.17, { w: 1.25, h: 0.46, size: 13.5, fill: col });
+      T(s, [B(n0(n), { color: col, fontSize: 36 }), N(" 쌍", { color: col, fontSize: 18, fontFace: F.bodyB, bold: true })],
+        { x: ix + 1.35, y, w: pw - 1.95, h: 0.8, align: "right", valign: "middle" });
+    };
+    const pair = (a, b, col, fill, y) => {
+      [[a, ix], [b, bx]].forEach(([yr, x]) => s.addText(String(yr), { isTextBox: true, shape: pres.shapes.ROUNDED_RECTANGLE, rectRadius: 0.1,
+        x, y, w: yw, h: 0.62, align: "center", valign: "middle", margin: 0, fontFace: F.bodyB, bold: true, fontSize: 21, color: col,
+        fill: { color: fill }, line: { color: col, width: 1.25 } }));
+      arrow(s, ax + 0.08, y + 0.31, bx - 0.08, y + 0.31, col);
+    };
+    head("학습 TRAIN", D.n_train, C.brand, 3.4);
+    T(s, "작년 정보 (x)", { x: ix, y: 4.25, w: yw, h: 0.35, fontSize: 12, color: C.muted, align: "center" });
+    T(s, "올해 결과 (y)", { x: bx, y: 4.25, w: yw, h: 0.35, fontSize: 12, color: C.muted, align: "center" });
+    pair(2023, 2024, C.brand, C.tint, 4.62);
+    pair(2024, 2025, C.brand, C.tint, 5.37);
+    line(s, ix, 6.27, px + pw - 0.3, 6.27, { color: C.muted, w: 1, dash: "dash" });
+    T(s, "시간 순으로 분리 (무작위로 섞지 않음)", { x: ix, y: 6.3, w: pw - 0.6, h: 0.35, fontSize: 11.5, color: C.muted, align: "center" });
+    head("시험 TEST", D.n_test, C.risk, 6.62);
+    pair(2025, 2026, C.risk, TEST_TINT, 7.5);
+    T(s, `고위험 기준 ${f2(D.cut)}%와 규모 구간은 학습 쌍에서만 정함`, { x: ix, y: 8.35, w: pw - 0.6, h: 0.85, fontSize: 12.5, color: C.ink, valign: "middle" });
+  }
   // 오른쪽: 검증 흔적
-  card(s, 14.75, 2.65, 4.45, 6.85);
-  sub(s, "검증 흔적", 15.05, 2.82, 4);
-  [[`${n0(D.n_raw - D.n_raw)}행`, "지운 행 (표시 후 제외)"], ["0건", "y(탈락률)에 한 보정"], [`${n0(D.n_train)} / ${n0(D.n_test)}`, "학습(2024, 25) / 테스트(2026) 쌍"], [`${f2(D.max_gap)}%p`, "공시 비율 vs 계÷재적 최대 차이"]].forEach(([v, l], i) => {
-    const y = 3.5 + i * 1.45;
-    T(s, v, { x: 15.05, y, w: 4, h: 0.65, fontFace: F.bodyB, bold: true, fontSize: 27, color: C.brand, valign: "middle" });
-    T(s, l, { x: 15.05, y: y + 0.62, w: 4, h: 0.45, fontSize: 13.5, color: C.muted });
+  card(s, 15.65, 2.65, 3.55, 6.85);
+  sub(s, "검증 흔적", 15.9, 2.82, 3.1);
+  [[`${n0(D.n_raw - D.n_raw)}행`, "지운 행 (표시 후 제외)"], ["0건", "y(탈락률)에 한 보정"], [`${f2(D.max_gap)}%p`, "공시 비율 vs 계÷재적 최대 차이"]].forEach(([v, l], i) => {
+    const y = 3.65 + i * 1.85;
+    T(s, v, { x: 15.9, y, w: 3.1, h: 0.65, fontFace: F.bodyB, bold: true, fontSize: 27, color: C.brand, valign: "middle" });
+    T(s, l, { x: 15.9, y: y + 0.62, w: 3.1, h: 0.75, fontSize: 13.5, color: C.muted });
   });
   readBar(s, "읽는 법", "막대 = 단계별로 남은 수. 연결 이후는 '전년 → 당해' 쌍 단위. 빠진 행의 사유와 건수는 정제로그 표 4, 5에 모두 공개", 9.7);
-  foot(s, `${SRC}, 노트북 §③ 셀 s3-16, s3-18, s3-19, s3-20, 정제로그 표 1, 4, 5`);
+  foot(s, `${SRC}, 노트북 §③ 셀 s3-16, s3-18, s3-19, s3-20(학습, 시험 쌍 수), §④ 셀 s4-02(고위험 기준), 정제로그 표 1, 4, 5`);
 }
 
 // ================================================================ 5. 했다: 차트 ① 교차 산점도
