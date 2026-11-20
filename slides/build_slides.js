@@ -260,33 +260,23 @@ pres.addSection({ title: "했다" });
     box(s, x0, y + 0.1, Math.max(0.2, (v / maxV) * wMax), 0.6, { fill: last ? C.brand : (i < 2 ? C.soft : "CBD3E6"), r: 0.06 });
     T(s, `${n0(v)}${unit}`, { x: x0 + (v / maxV) * wMax + 0.12, y, w: 1.9, h: 0.8, fontFace: F.bodyB, bold: true, fontSize: 16, color: last ? C.brand : C.ink, valign: "middle" });
   });
-  // 가운데: 학습 / 시험 분리 도식 (시간 순, 무작위 분할 아님)
+  // 가운데: 학습 / 시험 분리 도식 (연도 숫자가 포인트, 테두리 없음)
   {
-    const px = 10.7, pw = 4.7, ix = px + 0.3, yw = 1.6, ax = ix + yw, bx = ix + yw + 0.6;
-    const TEST_TINT = "FDEDE6";
-    card(s, px, 2.65, pw, 6.85);
-    sub(s, "학습과 시험 분리", ix, 2.82, pw - 0.6);
+    const ix = 10.65, yw = 1.85, gap = 0.95, bx = ix + yw + gap, rw = yw * 2 + gap;
     const head = (lab, n, col, y) => {
-      pill(s, lab, ix, y + 0.17, { w: 1.25, h: 0.46, size: 13.5, fill: col });
-      T(s, [B(n0(n), { color: col, fontSize: 36 }), N(" 쌍", { color: col, fontSize: 18, fontFace: F.bodyB, bold: true })],
-        { x: ix + 1.35, y, w: pw - 1.95, h: 0.8, align: "right", valign: "middle" });
+      pill(s, lab, ix, y, { w: 1.4, h: 0.5, size: 14, fill: col });
+      T(s, `${n0(n)}쌍`, { x: ix + 1.5, y, w: rw - 1.5, h: 0.5, fontFace: F.bodyB, bold: true, fontSize: 18, color: col, align: "right", valign: "middle" });
     };
-    const pair = (a, b, col, fill, y) => {
-      [[a, ix], [b, bx]].forEach(([yr, x]) => s.addText(String(yr), { isTextBox: true, shape: pres.shapes.ROUNDED_RECTANGLE, rectRadius: 0.1,
-        x, y, w: yw, h: 0.62, align: "center", valign: "middle", margin: 0, fontFace: F.bodyB, bold: true, fontSize: 21, color: col,
-        fill: { color: fill }, line: { color: col, width: 1.25 } }));
-      arrow(s, ax + 0.08, y + 0.31, bx - 0.08, y + 0.31, col);
+    const pair = (a, b, col, y) => {
+      [[a, ix], [b, bx]].forEach(([yr, x]) => T(s, String(yr), { x, y, w: yw, h: 0.95, fontFace: F.bodyB, bold: true, fontSize: 46, color: col, align: "center", valign: "middle" }));
+      arrow(s, ix + yw + 0.1, y + 0.48, bx - 0.1, y + 0.48, col);
     };
-    head("학습 TRAIN", D.n_train, C.brand, 3.4);
-    T(s, "작년 정보 (x)", { x: ix, y: 4.25, w: yw, h: 0.35, fontSize: 12, color: C.muted, align: "center" });
-    T(s, "올해 결과 (y)", { x: bx, y: 4.25, w: yw, h: 0.35, fontSize: 12, color: C.muted, align: "center" });
-    pair(2023, 2024, C.brand, C.tint, 4.62);
-    pair(2024, 2025, C.brand, C.tint, 5.37);
-    line(s, ix, 6.27, px + pw - 0.3, 6.27, { color: C.muted, w: 1, dash: "dash" });
-    T(s, "시간 순으로 분리 (무작위로 섞지 않음)", { x: ix, y: 6.3, w: pw - 0.6, h: 0.35, fontSize: 11.5, color: C.muted, align: "center" });
-    head("시험 TEST", D.n_test, C.risk, 6.62);
-    pair(2025, 2026, C.risk, TEST_TINT, 7.5);
-    T(s, `고위험 기준 ${f2(D.cut)}%와 규모 구간은 학습 쌍에서만 정함`, { x: ix, y: 8.35, w: pw - 0.6, h: 0.85, fontSize: 12.5, color: C.ink, valign: "middle" });
+    head("학습 TRAIN", D.n_train, C.brand, 3.0);
+    pair(2023, 2024, C.brand, 3.7);
+    pair(2024, 2025, C.brand, 4.8);
+    line(s, ix, 6.15, ix + rw, 6.15, { color: C.light, w: 1.25, dash: "dash" });
+    head("시험 TEST", D.n_test, C.risk, 6.5);
+    pair(2025, 2026, C.risk, 7.2);
   }
   // 오른쪽: 검증 흔적
   card(s, 15.65, 2.65, 3.55, 6.85);
